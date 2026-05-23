@@ -1,0 +1,1145 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Тренажёр к экзамену · 22 темы</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=Hanken+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  *{margin:0;padding:0;box-sizing:border-box}
+  :root{
+    --bg:#0d0e13;
+    --surface:#16181f;
+    --surface-2:#1c1f29;
+    --surface-3:#23262f;
+    --text:#ece8df;
+    --muted:#928e84;
+    --muted-2:#67645d;
+    --line:#2a2d37;
+    --line-soft:#21232c;
+    --accent:#f0b54a;
+    --accent-soft:rgba(240,181,74,0.13);
+    --radius:16px;
+    --maxw:1180px;
+    --hw:#f0b54a; --swd:#ef8e6b; --web:#5ec8c0; --alg:#b69cf0;
+    --db:#7cc379; --sec:#ec7b8a; --sys:#6fa8e8; --ml:#e08ec9;
+  }
+  html{scroll-behavior:smooth}
+  body{
+    background:var(--bg);
+    color:var(--text);
+    font-family:'Hanken Grotesk',system-ui,sans-serif;
+    line-height:1.6;
+    -webkit-font-smoothing:antialiased;
+    min-height:100vh;
+    position:relative;
+    overflow-x:hidden;
+  }
+  body::before{
+    content:"";position:fixed;inset:0;z-index:0;pointer-events:none;
+    background:
+      radial-gradient(900px 600px at 12% -5%, rgba(240,181,74,0.10), transparent 60%),
+      radial-gradient(800px 700px at 92% 8%, rgba(94,200,192,0.08), transparent 55%),
+      radial-gradient(1000px 800px at 50% 110%, rgba(182,156,240,0.07), transparent 60%);
+  }
+  body::after{
+    content:"";position:fixed;inset:0;z-index:0;pointer-events:none;opacity:0.035;
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
+  #app{position:relative;z-index:1}
+
+  /* ---------- HEADER ---------- */
+  header{
+    position:sticky;top:0;z-index:50;
+    backdrop-filter:blur(14px);
+    background:rgba(13,14,19,0.78);
+    border-bottom:1px solid var(--line-soft);
+  }
+  .head-inner{
+    max-width:var(--maxw);margin:0 auto;padding:14px 24px;
+    display:flex;align-items:center;gap:20px;flex-wrap:wrap;
+  }
+  .brand{display:flex;align-items:center;gap:13px;cursor:pointer;flex-shrink:0}
+  .brand-mark{
+    width:38px;height:38px;border-radius:11px;flex-shrink:0;
+    background:linear-gradient(135deg,var(--accent),#e08948);
+    display:grid;place-items:center;
+    font-family:'Fraunces',serif;font-weight:600;font-size:20px;color:#1a1206;
+    box-shadow:0 4px 18px rgba(240,181,74,0.25);
+  }
+  .brand-txt h1{font-family:'Fraunces',serif;font-weight:600;font-size:18px;letter-spacing:-0.01em;line-height:1.1}
+  .brand-txt span{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--muted);letter-spacing:0.02em}
+  .head-right{margin-left:auto;display:flex;align-items:center;gap:16px;flex-wrap:wrap}
+  .search{position:relative}
+  .search input{
+    width:230px;max-width:48vw;background:var(--surface);border:1px solid var(--line);
+    color:var(--text);padding:9px 14px 9px 36px;border-radius:11px;font-size:14px;
+    font-family:inherit;transition:.2s;
+  }
+  .search input:focus{outline:none;border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-soft)}
+  .search svg{position:absolute;left:11px;top:50%;transform:translateY(-50%);opacity:.5}
+  .progress-wrap{display:flex;align-items:center;gap:10px;font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--muted)}
+  .ring{width:38px;height:38px;flex-shrink:0}
+  .ring circle{fill:none;stroke-width:4}
+  .ring .bg{stroke:var(--line)}
+  .ring .fg{stroke:var(--accent);stroke-linecap:round;transition:stroke-dashoffset .6s ease;transform:rotate(-90deg);transform-origin:center}
+  .progress-num b{color:var(--text);font-size:14px}
+
+  /* ---------- TABS ---------- */
+  .tabs{display:flex;gap:4px;background:var(--surface);border:1px solid var(--line);padding:4px;border-radius:12px}
+  .tab{
+    border:none;background:none;color:var(--muted);font-family:inherit;font-weight:600;font-size:13px;
+    padding:7px 15px;border-radius:9px;cursor:pointer;transition:.18s;white-space:nowrap;
+  }
+  .tab.active{background:var(--surface-3);color:var(--text)}
+  .tab:hover:not(.active){color:var(--text)}
+
+  /* ---------- LAYOUT ---------- */
+  main{max-width:var(--maxw);margin:0 auto;padding:34px 24px 80px}
+
+  /* ---------- HERO ---------- */
+  .hero{margin-bottom:34px}
+  .hero .kick{font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:0.12em;text-transform:uppercase;color:var(--accent);margin-bottom:12px}
+  .hero h2{font-family:'Fraunces',serif;font-weight:600;font-size:clamp(30px,5vw,46px);line-height:1.05;letter-spacing:-0.02em;max-width:18ch}
+  .hero h2 em{font-style:italic;color:var(--accent)}
+  .hero p{color:var(--muted);max-width:60ch;margin-top:16px;font-size:16px}
+
+  /* ---------- FILTER CHIPS ---------- */
+  .chips{display:flex;gap:8px;flex-wrap:wrap;margin:26px 0 22px}
+  .chip{
+    border:1px solid var(--line);background:var(--surface);color:var(--muted);
+    font-family:inherit;font-weight:600;font-size:12.5px;padding:7px 13px;border-radius:99px;cursor:pointer;
+    transition:.16s;display:flex;align-items:center;gap:7px;
+  }
+  .chip .dot{width:8px;height:8px;border-radius:50%;background:currentColor}
+  .chip:hover{color:var(--text);border-color:var(--muted-2)}
+  .chip.active{color:#10110f;border-color:transparent}
+
+  /* ---------- GRID ---------- */
+  .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(290px,1fr));gap:16px}
+  .card{
+    position:relative;background:var(--surface);border:1px solid var(--line);
+    border-radius:var(--radius);padding:22px 22px 20px;cursor:pointer;overflow:hidden;
+    transition:transform .22s cubic-bezier(.2,.7,.3,1),border-color .22s,box-shadow .22s;
+    opacity:0;transform:translateY(14px);animation:rise .5s forwards;
+  }
+  @keyframes rise{to{opacity:1;transform:translateY(0)}}
+  .card::before{content:"";position:absolute;left:0;top:0;bottom:0;width:3px;background:var(--cat);opacity:0;transition:.22s}
+  .card:hover{transform:translateY(-4px);border-color:var(--cat);box-shadow:0 18px 40px -22px var(--cat)}
+  .card:hover::before{opacity:1}
+  .card .num{position:absolute;top:14px;right:18px;font-family:'Fraunces',serif;font-size:38px;font-weight:500;color:var(--line);line-height:1;transition:.22s}
+  .card:hover .num{color:var(--cat);opacity:.55}
+  .card .cat-tag{display:inline-flex;align-items:center;gap:6px;font-family:'JetBrains Mono',monospace;font-size:10.5px;letter-spacing:.04em;text-transform:uppercase;color:var(--cat);margin-bottom:13px}
+  .card .cat-tag .dot{width:7px;height:7px;border-radius:50%;background:var(--cat)}
+  .card h3{font-family:'Fraunces',serif;font-weight:600;font-size:20px;line-height:1.18;letter-spacing:-0.01em;padding-right:38px;margin-bottom:8px}
+  .card .teaser{color:var(--muted);font-size:13.5px;line-height:1.5;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+  .card .learned-badge{position:absolute;bottom:16px;right:18px;opacity:0;transform:scale(.6);transition:.2s}
+  .card.learned{border-color:color-mix(in srgb,var(--cat) 55%,var(--line))}
+  .card.learned .learned-badge{opacity:1;transform:scale(1)}
+  .card.learned .learned-badge svg circle{fill:var(--cat)}
+  .empty{text-align:center;color:var(--muted);padding:60px 0;font-size:15px}
+
+  /* ---------- LESSON ---------- */
+  .lesson{max-width:780px;margin:0 auto;animation:fadeUp .4s}
+  @keyframes fadeUp{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+  .back{display:inline-flex;align-items:center;gap:8px;background:none;border:none;color:var(--muted);font-family:'JetBrains Mono',monospace;font-size:13px;cursor:pointer;margin-bottom:26px;transition:.18s}
+  .back:hover{color:var(--accent);gap:11px}
+  .l-head{display:flex;align-items:flex-start;gap:20px;margin-bottom:22px}
+  .l-num{font-family:'Fraunces',serif;font-weight:600;font-size:clamp(48px,9vw,76px);line-height:.85;color:var(--cat);flex-shrink:0;letter-spacing:-0.03em}
+  .l-head-txt{padding-top:6px}
+  .l-cat{display:inline-flex;align-items:center;gap:7px;font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.05em;text-transform:uppercase;color:var(--cat);margin-bottom:9px}
+  .l-cat .dot{width:8px;height:8px;border-radius:50%;background:var(--cat)}
+  .l-title{font-family:'Fraunces',serif;font-weight:600;font-size:clamp(26px,4.5vw,36px);line-height:1.08;letter-spacing:-0.02em}
+  .q-block{background:var(--surface);border:1px solid var(--line);border-left:3px solid var(--cat);border-radius:12px;padding:15px 18px;margin-bottom:34px;display:flex;gap:12px;align-items:flex-start}
+  .q-block .q-label{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted-2);flex-shrink:0;padding-top:3px}
+  .q-block .q-text{font-size:14.5px;color:var(--muted)}
+
+  .section{margin-bottom:30px}
+  .s-head{display:flex;align-items:center;gap:11px;margin-bottom:13px}
+  .s-icon{width:30px;height:30px;border-radius:9px;background:var(--cat);opacity:.92;display:grid;place-items:center;flex-shrink:0;color:#12120e}
+  .s-icon svg{width:17px;height:17px}
+  .s-label{font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:.07em;text-transform:uppercase;color:var(--text);font-weight:600}
+  .s-body{padding-left:41px;color:#d4d0c6;font-size:15.5px}
+  .s-body p{margin-bottom:11px}
+  .s-body strong{color:var(--text);font-weight:600}
+  .s-body ul{list-style:none;margin:11px 0}
+  .s-body li{position:relative;padding-left:20px;margin-bottom:8px}
+  .s-body li::before{content:"";position:absolute;left:3px;top:11px;width:6px;height:6px;border-radius:50%;background:var(--cat);opacity:.7}
+  .s-body code{font-family:'JetBrains Mono',monospace;font-size:.86em;background:var(--surface-3);padding:2px 6px;border-radius:5px;color:var(--accent)}
+  .section.simple .s-body{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:16px 18px;margin-left:41px;padding-left:18px;font-size:15.5px;color:#dad6cc}
+  .section.remember .s-body{background:color-mix(in srgb,var(--cat) 9%,var(--surface));border:1px solid color-mix(in srgb,var(--cat) 25%,var(--line));border-radius:12px;padding:16px 18px;margin-left:41px;padding-left:18px}
+  .section.formal .s-body{background:#0a0b0f;border:1px solid var(--line);border-radius:12px;padding:18px 20px;margin-left:41px;padding-left:20px;font-size:15px;line-height:1.7;color:#d8d4ca}
+  .section.formal .s-body p{margin-bottom:12px}
+  .section.formal .s-body p:last-child{margin-bottom:0}
+  .section.formal .s-body .fnote{display:block;margin-top:14px;padding-top:12px;border-top:1px dashed var(--line);font-size:12.5px;color:var(--muted-2);font-style:italic;line-height:1.5}
+  .section.formal .s-body .term{color:var(--text);font-weight:600}
+  .copy-btn{position:absolute;top:0;right:0;background:var(--surface-2);border:1px solid var(--line);color:var(--muted);font-family:'JetBrains Mono',monospace;font-size:11px;padding:5px 11px;border-radius:8px;cursor:pointer;transition:.16s;display:flex;align-items:center;gap:6px}
+  .copy-btn:hover{color:var(--accent);border-color:var(--accent)}
+  .copy-btn.copied{color:var(--db);border-color:var(--db)}
+  .section.formal .s-head{position:relative}
+
+  /* glossary tooltips */
+  .gloss{border-bottom:1px dotted var(--muted);cursor:help;position:relative}
+  .gloss:hover,.gloss.open{color:var(--accent)}
+  .gloss-pop{position:fixed;z-index:200;max-width:300px;background:#05060a;border:1px solid var(--accent);border-radius:10px;padding:11px 14px;font-size:13.5px;line-height:1.5;color:#e8e4da;box-shadow:0 14px 40px -10px rgba(0,0,0,.7);pointer-events:none;opacity:0;transform:translateY(4px);transition:opacity .15s,transform .15s}
+  .gloss-pop.show{opacity:1;transform:translateY(0)}
+  .gloss-pop b{color:var(--accent);display:block;margin-bottom:3px;font-family:'JetBrains Mono',monospace;font-size:11.5px;text-transform:uppercase;letter-spacing:.03em}
+  pre{background:#0a0b0f;border:1px solid var(--line);border-radius:11px;padding:15px 17px;overflow-x:auto;margin:13px 0;font-family:'JetBrains Mono',monospace;font-size:13px;line-height:1.65;color:#9fd6cf}
+  pre .cm{color:var(--muted-2)}
+
+  .l-nav{display:flex;justify-content:space-between;gap:12px;margin-top:42px;padding-top:24px;border-top:1px solid var(--line-soft)}
+  .l-nav button{flex:1;background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:14px 18px;cursor:pointer;text-align:left;transition:.18s;color:var(--text);font-family:inherit;min-width:0}
+  .l-nav button:hover:not(:disabled){border-color:var(--accent);transform:translateY(-2px)}
+  .l-nav button:disabled{opacity:.3;cursor:default}
+  .l-nav .dir{font-family:'JetBrains Mono',monospace;font-size:10.5px;color:var(--muted);text-transform:uppercase;letter-spacing:.05em}
+  .l-nav .nt{font-family:'Fraunces',serif;font-size:15px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;display:block}
+  .l-nav .next{text-align:right}
+  .mark-btn{display:block;width:100%;margin-top:24px;padding:14px;border-radius:12px;border:1px solid var(--cat);background:transparent;color:var(--cat);font-family:inherit;font-weight:600;font-size:15px;cursor:pointer;transition:.18s;display:flex;align-items:center;justify-content:center;gap:9px}
+  .mark-btn:hover{background:color-mix(in srgb,var(--cat) 14%,transparent)}
+  .mark-btn.done{background:var(--cat);color:#11110d;border-color:var(--cat)}
+
+  /* ---------- FLASHCARDS ---------- */
+  .flash-wrap{max-width:620px;margin:0 auto;text-align:center;animation:fadeUp .4s}
+  .flash-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:22px}
+  .flash-count{font-family:'JetBrains Mono',monospace;font-size:13px;color:var(--muted)}
+  .flash-cat-pick{display:flex;gap:6px;flex-wrap:wrap;justify-content:center;margin-bottom:24px}
+  .flashcard{perspective:1600px;height:360px;cursor:pointer;margin-bottom:24px}
+  .fc-inner{position:relative;width:100%;height:100%;transition:transform .6s cubic-bezier(.4,.2,.2,1);transform-style:preserve-3d}
+  .flashcard.flipped .fc-inner{transform:rotateY(180deg)}
+  .fc-face{position:absolute;inset:0;backface-visibility:hidden;border-radius:20px;padding:36px;display:flex;flex-direction:column;justify-content:center;border:1px solid var(--line)}
+  .fc-front{background:var(--surface)}
+  .fc-back{background:color-mix(in srgb,var(--cat) 11%,var(--surface));border-color:color-mix(in srgb,var(--cat) 30%,var(--line));transform:rotateY(180deg);overflow-y:auto}
+  .fc-tag{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--cat);margin-bottom:18px}
+  .fc-q{font-family:'Fraunces',serif;font-size:24px;font-weight:600;line-height:1.25;letter-spacing:-0.01em}
+  .fc-num{font-family:'Fraunces',serif;font-size:54px;color:var(--cat);opacity:.3;line-height:1;margin-bottom:14px}
+  .fc-hint{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--muted-2);margin-top:24px}
+  .fc-a{font-size:16px;line-height:1.6;color:#dcd8ce;text-align:left}
+  .fc-a strong{color:var(--text)}
+  .flash-ctrl{display:flex;gap:10px;justify-content:center}
+  .flash-ctrl button{background:var(--surface);border:1px solid var(--line);color:var(--text);font-family:inherit;font-weight:600;font-size:14px;padding:11px 20px;border-radius:11px;cursor:pointer;transition:.18s}
+  .flash-ctrl button:hover{border-color:var(--accent);color:var(--accent)}
+  .flash-ctrl button.primary{background:var(--accent);color:#11110d;border-color:var(--accent)}
+  .flash-ctrl button.primary:hover{filter:brightness(1.08);color:#11110d}
+
+  /* ---------- HOWTO (письменный ответ) ---------- */
+  .howto{max-width:820px;margin:0 auto;animation:fadeUp .4s}
+  .howto .kick{font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--accent);margin-bottom:12px}
+  .howto h2{font-family:'Fraunces',serif;font-weight:600;font-size:clamp(28px,4.5vw,40px);line-height:1.06;letter-spacing:-0.02em;max-width:20ch}
+  .howto h2 em{font-style:italic;color:var(--accent)}
+  .howto .lede{color:var(--muted);max-width:62ch;margin-top:14px;font-size:16px}
+  .howto h3{font-family:'Fraunces',serif;font-weight:600;font-size:23px;letter-spacing:-0.01em;margin:42px 0 6px;display:flex;align-items:center;gap:12px}
+  .howto h3 .hn{font-family:'JetBrains Mono',monospace;font-size:13px;color:var(--accent);background:var(--accent-soft);border:1px solid color-mix(in srgb,var(--accent) 28%,var(--line));width:30px;height:30px;border-radius:9px;display:grid;place-items:center;flex-shrink:0;font-weight:600}
+  .howto h3 .sub{font-family:'Hanken Grotesk',sans-serif;font-size:13px;font-weight:500;color:var(--muted-2);margin-left:auto}
+
+  /* skeleton — структура ответа */
+  .skeleton{display:flex;flex-direction:column;gap:0;margin:18px 0 6px;border-left:2px solid var(--line);padding-left:0}
+  .sk-step{position:relative;padding:14px 0 14px 30px;border-bottom:1px solid var(--line-soft)}
+  .sk-step:last-child{border-bottom:none}
+  .sk-step::before{content:"";position:absolute;left:-6px;top:20px;width:10px;height:10px;border-radius:50%;background:var(--accent);box-shadow:0 0 0 4px var(--bg)}
+  .sk-step h4{font-size:15.5px;font-weight:700;margin-bottom:3px;color:var(--text)}
+  .sk-step p{font-size:14.5px;color:var(--muted);line-height:1.55}
+  .sk-step .tag{font-family:'JetBrains Mono',monospace;font-size:10.5px;color:var(--muted-2);text-transform:uppercase;letter-spacing:.05em;display:block;margin-bottom:5px}
+
+  /* do / dont */
+  .dd-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:20px 0 6px}
+  .dd{border:1px solid var(--line);border-radius:14px;padding:18px 20px;background:var(--surface)}
+  .dd.good{border-color:color-mix(in srgb,var(--db) 35%,var(--line))}
+  .dd.bad{border-color:color-mix(in srgb,var(--sec) 35%,var(--line))}
+  .dd .dd-h{display:flex;align-items:center;gap:9px;font-family:'JetBrains Mono',monospace;font-size:12px;text-transform:uppercase;letter-spacing:.05em;font-weight:600;margin-bottom:13px}
+  .dd.good .dd-h{color:var(--db)}
+  .dd.bad .dd-h{color:var(--sec)}
+  .dd .dd-icon{width:24px;height:24px;border-radius:7px;display:grid;place-items:center;flex-shrink:0}
+  .dd.good .dd-icon{background:color-mix(in srgb,var(--db) 18%,transparent)}
+  .dd.bad .dd-icon{background:color-mix(in srgb,var(--sec) 18%,transparent)}
+  .dd ul{list-style:none}
+  .dd li{position:relative;padding-left:20px;margin-bottom:10px;font-size:14px;color:#d4d0c6;line-height:1.5}
+  .dd li:last-child{margin-bottom:0}
+  .dd.good li::before{content:"✓";position:absolute;left:0;top:0;color:var(--db);font-weight:700}
+  .dd.bad li::before{content:"✕";position:absolute;left:1px;top:0;color:var(--sec);font-weight:700;font-size:13px}
+
+  /* phrases */
+  .phrases{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:12px;margin:18px 0 6px}
+  .phrase{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:14px 16px}
+  .phrase .ph-when{font-family:'JetBrains Mono',monospace;font-size:10.5px;text-transform:uppercase;letter-spacing:.04em;color:var(--accent);margin-bottom:7px}
+  .phrase .ph-txt{font-size:14px;color:#d8d4ca;line-height:1.5;font-style:italic}
+
+  /* worked example */
+  .worked{background:var(--surface);border:1px solid var(--line);border-radius:16px;overflow:hidden;margin:20px 0 6px}
+  .worked .w-bar{background:var(--surface-2);border-bottom:1px solid var(--line);padding:13px 20px;font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--muted);display:flex;align-items:center;gap:9px}
+  .worked .w-bar b{color:var(--text);font-weight:600}
+  .worked .w-body{padding:8px 22px 18px}
+  .worked .w-part{padding:15px 0;border-bottom:1px dashed var(--line-soft)}
+  .worked .w-part:last-child{border-bottom:none}
+  .worked .w-role{font-family:'JetBrains Mono',monospace;font-size:10.5px;text-transform:uppercase;letter-spacing:.05em;color:var(--accent);margin-bottom:7px}
+  .worked .w-text{font-size:15px;color:#dcd8ce;line-height:1.6}
+  .worked .w-text strong{color:var(--text)}
+  .worked .w-note{font-size:12.5px;color:var(--muted-2);margin-top:8px;padding-left:13px;border-left:2px solid var(--line);font-style:italic}
+
+  .clock{background:color-mix(in srgb,var(--accent) 8%,var(--surface));border:1px solid color-mix(in srgb,var(--accent) 24%,var(--line));border-radius:14px;padding:18px 22px;margin:20px 0 6px}
+  .clock .cl-row{display:flex;align-items:baseline;gap:14px;padding:8px 0;border-bottom:1px solid color-mix(in srgb,var(--accent) 12%,var(--line))}
+  .clock .cl-row:last-child{border-bottom:none}
+  .clock .cl-t{font-family:'JetBrains Mono',monospace;font-size:13px;font-weight:600;color:var(--accent);flex-shrink:0;width:70px}
+  .clock .cl-d{font-size:14.5px;color:#d4d0c6}
+
+  footer{max-width:var(--maxw);margin:0 auto;padding:30px 24px 50px;color:var(--muted-2);font-size:12.5px;font-family:'JetBrains Mono',monospace;text-align:center;border-top:1px solid var(--line-soft);margin-top:40px}
+
+  @media(max-width:640px){
+    .head-inner{padding:12px 16px;gap:12px}
+    .search input{width:150px}
+    main{padding:24px 16px 60px}
+    .l-head{gap:14px}
+    .s-body,.section.simple .s-body,.section.remember .s-body{padding-left:0;margin-left:0}
+    .section.simple .s-body,.section.remember .s-body{padding-left:16px}
+    .l-nav{flex-direction:column}
+    .dd-grid{grid-template-columns:1fr}
+    .howto h3 .sub{display:none}
+  }
+</style>
+</head>
+<body>
+<div id="app">
+  <header>
+    <div class="head-inner">
+      <div class="brand" onclick="go('grid')">
+        <div class="brand-mark">Н</div>
+        <div class="brand-txt">
+          <h1>Тренажёр к экзамену</h1>
+          <span>22 темы · понимание, не зубрёжка</span>
+        </div>
+      </div>
+      <div class="head-right">
+        <div class="search">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg>
+          <input id="search" type="text" placeholder="Поиск темы…" oninput="onSearch(this.value)">
+        </div>
+        <div class="progress-wrap">
+          <svg class="ring" viewBox="0 0 38 38"><circle class="bg" cx="19" cy="19" r="16"/><circle class="fg" id="ring-fg" cx="19" cy="19" r="16"/></svg>
+          <span class="progress-num"><b id="learned-n">0</b>/22</span>
+        </div>
+      </div>
+    </div>
+    <div class="head-inner" style="padding-top:0">
+      <div class="tabs">
+        <button class="tab active" id="tab-grid" onclick="go('grid')">Темы</button>
+        <button class="tab" id="tab-flash" onclick="go('flash')">Самопроверка</button>
+        <button class="tab" id="tab-howto" onclick="go('howto')">Как отвечать</button>
+      </div>
+    </div>
+  </header>
+  <main id="view"></main>
+  <footer>Прогресс хранится только в этой вкладке и сбросится при перезагрузке · Удачи на защите, Николай</footer>
+</div>
+
+<script>
+const CATS={
+  hw:{label:'Архитектура',color:'var(--hw)'},
+  swd:{label:'Проектирование ПО',color:'var(--swd)'},
+  web:{label:'Веб и сети',color:'var(--web)'},
+  alg:{label:'Алгоритмы и данные',color:'var(--alg)'},
+  db:{label:'Базы данных',color:'var(--db)'},
+  sec:{label:'Безопасность',color:'var(--sec)'},
+  sys:{label:'Процессы и ИС',color:'var(--sys)'},
+  ml:{label:'Машинное обучение',color:'var(--ml)'}
+};
+const TOPICS=[
+{
+id:1,cat:'hw',
+title:'Архитектура ЭВМ',
+q:'Архитектура ЭВМ.',
+simple:'Компьютер — очень быстрый, но очень тупой исполнитель: берёт из памяти команду, выполняет, берёт следующую. Вся «магия» в том, что таких простых шагов он делает миллиарды в секунду. Архитектура — про то, <strong>как организованы</strong> эти кирпичики.',
+explain:'<p>Почти все компьютеры построены по <strong>архитектуре фон Неймана</strong>. Её главная идея: <strong>программа хранится в той же памяти, что и данные</strong>. Команды — такие же числа в памяти, поэтому компьютер можно перепрограммировать, просто загрузив другую программу.</p><p>Четыре принципа фон Неймана:</p><ul><li><strong>Однородность памяти</strong> — команды и данные лежат вместе, неотличимы.</li><li><strong>Адресность</strong> — память это пронумерованные ячейки, доступ по адресу.</li><li><strong>Программное управление</strong> — команды идут по порядку (пока нет перехода).</li><li><strong>Двоичное кодирование</strong>.</li></ul><p>Состав: <strong>процессор (ЦП)</strong> = <strong>АЛУ</strong> (считает) + <strong>УУ</strong> (управляет, какую команду брать); <strong>память</strong> (ОЗУ, регистры, кэш); <strong>устройства ввода-вывода</strong>; <strong>шины</strong> — данных, адресная, управляющая.</p><p><strong>Гарвардская архитектура</strong> — память команд и данных <em>физически разделены</em>, можно читать команду и данные одновременно (быстрее, применяется в микроконтроллерах и кэшах L1).</p><p><strong>«Узкое место фон Неймана»</strong> — одна шина между ЦП и памятью ограничивает скорость, отсюда кэши и конвейеры. <strong>CISC</strong> (x86) — много сложных команд; <strong>RISC</strong> (ARM) — мало простых команд фиксированной длины.</p>',
+formal:'<p><span class="term">Архитектура ЭВМ</span> — совокупность принципов организации вычислительной машины: состав устройств, их взаимодействие и система команд.</p><p>Большинство ЭВМ построено по <span class="term">архитектуре фон Неймана</span>, основной принцип которой — хранение команд и данных в единой памяти. Её принципы: однородность памяти, адресность, программное управление, двоичное кодирование.</p><p>В состав ЭВМ входят: процессор (АЛУ для вычислений и УУ для управления), память, устройства ввода-вывода и системные шины. В <span class="term">гарвардской архитектуре</span> память команд и данных разделены физически (применяется в микроконтроллерах). По системе команд различают процессоры CISC и RISC.</p>',
+example:'<p>Команда <code>C = A + B</code> проходит цикл <strong>выборка → декодирование → исполнение</strong>: УУ берёт команду «сложить» из памяти → достаёт A и B в регистры → АЛУ складывает → результат пишется по адресу C.</p>',
+remember:'Фон Нейман = команды и данные в одной памяти. Процессор = АЛУ + УУ. Гарвардская = раздельная память (быстрее, для МК). CISC — сложные команды, RISC — простые.'
+},
+{
+id:2,cat:'swd',
+title:'Архитектурные паттерны: MVC, MVVM, MVP',
+q:'Архитектурные паттерны. MVC, MVVM, MVP.',
+simple:'Приложение как ресторан: <strong>кухня</strong> (логика и данные), <strong>зал</strong> (интерфейс) и <strong>официант</strong> (посредник). Если всё свалить в кучу — будет хаос. Эти паттерны делят обязанности, чтобы менять интерфейс, не ломая логику.',
+explain:'<p>Везде три роли: <strong>Model</strong> — данные и логика (кухня); <strong>View</strong> — то, что видит пользователь; <strong>посредник</strong> — связывает их. Разница именно в посреднике.</p><ul><li><strong>MVC (Controller).</strong> Пользователь жмёт кнопку → <strong>Controller</strong> меняет Model и выбирает View. View может сам читать Model. Веб: ASP.NET MVC, Spring, Laravel.</li><li><strong>MVP (Presenter).</strong> View «тупой», не знает про Model, всё через <strong>Presenter</strong> по интерфейсу. Удобно тестировать. Десктоп, старый Android.</li><li><strong>MVVM (ViewModel).</strong> Главная фишка — <strong>двусторонняя привязка данных (data binding)</strong>: поле ввода связано с переменной ViewModel, синхронизация автоматическая. WPF, Angular, Vue.</li></ul>',
+formal:'<p><span class="term">Архитектурные паттерны</span> служат для разделения бизнес-логики и интерфейса. Все они выделяют три компонента: <span class="term">Model</span> (данные и логика), <span class="term">View</span> (отображение) и посредник между ними; различаются именно посредником.</p><p>В <span class="term">MVC</span> посредник — контроллер (Controller), принимающий ввод и выбирающий представление. В <span class="term">MVP</span> представление пассивно и связано с моделью только через презентер (Presenter), что повышает тестируемость. В <span class="term">MVVM</span> посредник — модель представления (ViewModel), а ключевая особенность — двусторонняя привязка данных (data binding), автоматически синхронизирующая View и ViewModel.</p>',
+example:'<p>Форма «изменить имя»:</p><ul><li><strong>MVC:</strong> ввёл → нажал «Сохранить» → Controller обновил Model → перерисовал страницу.</li><li><strong>MVVM:</strong> поле ввода <em>привязано</em> к <code>viewModel.userName</code> — печатаешь, переменная меняется сразу, без кнопки и без ручного кода.</li></ul>',
+remember:'Все три = разделение логики (Model) и интерфейса (View). MVC — контроллер выбирает View; MVP — презентер управляет пассивным View (тестируемо); MVVM — автоматический биндинг через ViewModel.'
+},
+{
+id:3,cat:'web',
+title:'Вёрстка страниц: HTML, CSS, JS',
+q:'Вёрстка страниц. HTML, CSS, JS. Фреймворки.',
+simple:'Страница как дом: <strong>HTML</strong> — каркас и стены (что где); <strong>CSS</strong> — отделка и краска (как выглядит); <strong>JS</strong> — электрика и автоматика (что происходит при нажатии).',
+explain:'<p><strong>HTML</strong> задаёт структуру и смысл. Семантическая вёрстка — теги по назначению (<code>header</code>, <code>nav</code>, <code>main</code>, <code>article</code>, <code>footer</code>), важна для SEO и доступности.</p><p><strong>CSS</strong> — внешний вид. Ключевое:</p><ul><li><strong>Селекторы</strong> — по тегу, классу (<code>.btn</code>), id (<code>#header</code>).</li><li><strong>Блочная модель (box model)</strong> — content + padding + border + margin.</li><li><strong>Flexbox</strong> — раскладка в одну линию; <strong>Grid</strong> — двумерная сетка.</li><li><strong>Медиазапросы</strong> — адаптивность.</li></ul><p><strong>JS</strong> — поведение. Работает с <strong>DOM</strong> (дерево, в которое браузер превращает HTML), обрабатывает <strong>события</strong>, делает асинхронные запросы (<code>fetch</code>).</p><p><strong>Фреймворки:</strong> JS — <strong>React</strong> (компоненты, виртуальный DOM), Vue, Angular (TypeScript). CSS — Bootstrap (готовые компоненты), Tailwind (utility-классы).</p>',
+formal:'<p><span class="term">Вёрстка</span> — создание структуры, оформления и поведения веб-страницы средствами HTML, CSS и JavaScript.</p><p><span class="term">HTML</span> — язык разметки, задающий структуру и семантику документа посредством тегов. <span class="term">CSS</span> — язык стилей, отвечающий за оформление; основные понятия — селекторы, блочная модель, раскладки Flexbox и Grid. <span class="term">JavaScript</span> — язык программирования, обеспечивающий интерактивность: работу с DOM, обработку событий, обмен с сервером.</p><p>Применяются фреймворки: React, Vue, Angular (JavaScript), Bootstrap, Tailwind (CSS).</p>',
+example:'<p>Кнопка «Лайк»: <code>&lt;button&gt;</code> в HTML создаёт кнопку, CSS красит и округляет, JS ловит клик и меняет счётчик без перезагрузки страницы.</p>',
+remember:'HTML — структура/смысл, CSS — оформление (box model, flex, grid), JS — поведение (DOM, события). DOM = дерево страницы. React/Vue/Angular — JS-фреймворки.'
+},
+{
+id:4,cat:'alg',
+title:'Деревья',
+q:'Деревья. Основные определения, виды деревьев, поиск в деревьях.',
+simple:'Дерево — иерархия, как структура папок на диске или генеалогическое древо. Есть «главный» (корень), у него вложенные элементы, у тех — свои. Растёт «вниз»: корень сверху, листья снизу.',
+explain:'<p>Формально <strong>дерево</strong> — связный граф без циклов. Термины: <strong>корень</strong> (верхний узел без родителя), <strong>лист</strong> (без детей), родитель/потомок, <strong>глубина узла</strong> (шагов от корня), <strong>высота дерева</strong> (глубина самого глубокого листа).</p><p><strong>Виды:</strong></p><ul><li><strong>Бинарное</strong> — максимум 2 потомка.</li><li><strong>Бинарное дерево поиска (BST)</strong> — слева <strong>меньше</strong>, справа <strong>больше</strong>. Поиск отбрасывает половину → среднее <strong>O(log n)</strong>; в худшем (вырождение в «палку») — <strong>O(n)</strong>.</li><li><strong>Сбалансированные:</strong> AVL (строгий баланс), красно-чёрное (в map/set).</li><li><strong>B-дерево</strong> — для БД и файловых систем (меньше обращений к диску).</li><li><strong>Куча (heap)</strong> — для очереди с приоритетом.</li></ul><p><strong>Обходы:</strong> в глубину (DFS) — прямой, <strong>симметричный (in-order)</strong> лево→корень→право (в BST даёт отсортированный список!), обратный; в ширину (<strong>BFS</strong>) — по уровням через очередь.</p>',
+formal:'<p><span class="term">Дерево</span> — связный ациклический граф, представляющий иерархическую структуру. Узел без родителя — корень, без потомков — лист; высота дерева — максимальная глубина узлов.</p><p>Виды: бинарное дерево (не более двух потомков); <span class="term">бинарное дерево поиска (BST)</span>, где слева значения меньше, справа больше узла; сбалансированные деревья (AVL, красно-чёрное); B-деревья (для СУБД); куча.</p><p>Поиск в BST выполняется за O(log n) в среднем и O(n) в худшем случае. Обход возможен в глубину (прямой, симметричный, обратный) и в ширину; симметричный обход BST даёт отсортированную последовательность.</p>',
+example:'<p>Ищем 7 в BST: корень 10 → 7&lt;10, влево → 5 → 7&gt;5, вправо → нашли 7. Три шага вместо перебора всех элементов.</p>',
+remember:'Корень/лист/высота. BST: слева меньше, справа больше → O(log n), в худшем O(n) → спасают AVL и красно-чёрные. In-order обход BST = сортировка. B-деревья — для БД.'
+},
+{
+id:5,cat:'sec',
+title:'Шифрование. Симметричное, асимметричное, RSA',
+q:'Информационная безопасность. Асимметричное и симметричное шифрование. RSA.',
+simple:'Шифрование — замок на сообщении. <strong>Симметричное</strong> — один ключ и закрывает, и открывает (как ключ от квартиры). Проблема: как передать копию? <strong>Асимметричное</strong> хитрее: два ключа-половинки. Открытый раздаёшь всем (им только <em>запереть</em>), закрытый держишь у себя (только им <em>отпереть</em>).',
+explain:'<p><strong>Симметричное</strong> — один секретный ключ. Быстрое, для больших объёмов. Минус — проблема передачи ключа. Алгоритмы: <strong>AES</strong>, DES, «Кузнечик».</p><p><strong>Асимметричное</strong> — пара <strong>открытый/закрытый</strong>. Что зашифровано открытым — открывается только закрытым. Решает проблему ключа, но медленное. Алгоритмы: <strong>RSA</strong>, ECC.</p><p><strong>RSA по шагам</strong> (стойкость = сложность факторизации):</p><ul><li>Два больших простых <strong>p</strong> и <strong>q</strong>;</li><li>модуль <strong>n = p·q</strong>;</li><li>функция Эйлера <strong>φ(n) = (p−1)(q−1)</strong>;</li><li>открытая экспонента <strong>e</strong> (взаимно проста с φ);</li><li>закрытая <strong>d</strong>: <strong>e·d ≡ 1 (mod φ(n))</strong>.</li></ul><p>Открытый ключ (e, n), закрытый (d, n). Шифрование <strong>C = Mᵉ mod n</strong>, расшифровка <strong>M = Cᵈ mod n</strong>. <strong>ЭЦП</strong>: подписываем хэш закрытым ключом, проверяем открытым. На практике — гибридная схема (HTTPS): асимметрией передают симметричный ключ.</p>',
+formal:'<p>Различают симметричное и асимметричное шифрование. При <span class="term">симметричном</span> шифровании используется один секретный ключ для зашифрования и расшифрования (алгоритмы AES, DES); метод быстрый, но порождает проблему передачи ключа. При <span class="term">асимметричном</span> используется пара ключей — открытый и закрытый; зашифрованное открытым ключом расшифровывается только закрытым, что решает проблему передачи ключа.</p><p>Алгоритм <span class="term">RSA</span> основан на сложности факторизации больших чисел. Генерация ключей: выбираются простые p и q; n = p·q; φ(n) = (p−1)(q−1); выбирается e, взаимно простое с φ(n); вычисляется d, где e·d ≡ 1 (mod φ(n)). Открытый ключ — (e, n), закрытый — (d, n). Зашифрование: C = Mᵉ mod n, расшифрование: M = Cᵈ mod n.</p>',
+example:'<p>RSA на маленьких числах: p=3, q=11 → n=33, φ=2·10=20. Возьмём e=7 → d=3 (21 mod 20 = 1). Шифруем M=2: C = 2⁷ mod 33 = 128 mod 33 = <strong>29</strong>. Расшифровка: 29³ mod 33 = 24389 mod 33 = <strong>2</strong>. Вернулось исходное.</p>',
+remember:'Симметрия — один ключ (AES), быстро, но проблема передачи. Асимметрия — открытый/закрытый (RSA), решает проблему ключа, но медленно. RSA: n=pq, φ=(p−1)(q−1), e·d≡1 mod φ. Подпись = хэш закрытым ключом.'
+},
+{
+id:6,cat:'sys',
+title:'Жизненный цикл информационных систем',
+q:'Жизненный цикл ИС. Этапы и стадии жизненного цикла ИС.',
+simple:'Любая ИС рождается, живёт и умирает — как дом: задумали и спроектировали, построили, заселили, ремонтировали по ходу, в конце снесли. ЖЦ — описание всех этих стадий по порядку.',
+explain:'<p><strong>Жизненный цикл ИС</strong> — период от появления потребности до вывода системы из эксплуатации. Стандарты: ГОСТ 34, <strong>ISO/IEC 12207</strong>.</p><p><strong>Стадии:</strong></p><ul><li><strong>Анализ требований</strong> — что нужно? Обследование, сбор требований.</li><li><strong>Проектирование</strong> — архитектура, БД, интерфейсы (концептуальный → логический → физический).</li><li><strong>Реализация (разработка)</strong> — пишем код.</li><li><strong>Тестирование</strong> — ищем и чиним ошибки.</li><li><strong>Внедрение</strong> — установка, обучение людей.</li><li><strong>Эксплуатация и сопровождение</strong> — поддержка и доработки (самая долгая стадия).</li><li><strong>Вывод из эксплуатации</strong>.</li></ul><p><strong>Модели ЖЦ:</strong> каскадная (строго по очереди), итерационная/инкрементная (кусками с возвратами), спиральная (анализ рисков на каждом витке).</p>',
+formal:'<p><span class="term">Жизненный цикл ИС</span> — период от возникновения потребности в системе до её вывода из эксплуатации (регламентируется ISO/IEC 12207).</p><p>Основные стадии: анализ требований, проектирование, реализация, тестирование, внедрение, эксплуатация и сопровождение, вывод из эксплуатации.</p><p>Модели жизненного цикла: <span class="term">каскадная</span> (последовательное прохождение этапов), <span class="term">итерационная</span> (разработка по частям с возвратами), <span class="term">спиральная</span> (с анализом рисков на каждом витке).</p>',
+example:'<p>Электронный дневник: выясняем нужды учителей и родителей (анализ) → рисуем БД и экраны (проектирование) → пишем (реализация) → тестируем на одной школе → запускаем на регион (внедрение) → годами поддерживаем (эксплуатация).</p>',
+remember:'ЖЦ = от потребности до вывода. Стадии: анализ → проектирование → реализация → тестирование → внедрение → эксплуатация → вывод. Модели: каскад, итерационная, спиральная (риски). Стандарт — ISO/IEC 12207.'
+},
+{
+id:7,cat:'ml',
+title:'Машинное обучение',
+q:'Машинное обучение. Решаемые задачи, виды машинного обучения. Основные понятия.',
+simple:'Обычная программа: ты пишешь правила, она считает. Машинное обучение наоборот: ты <strong>показываешь примеры</strong>, а программа <strong>сама выводит правила</strong>. Не «если письмо содержит X — спам», а «вот 10 000 писем с пометками — научись отличать сама».',
+explain:'<p><strong>Три вида обучения:</strong></p><ul><li><strong>С учителем (supervised)</strong> — данные размечены (X → y). Задачи: <strong>классификация</strong> (категория: спам/не спам) и <strong>регрессия</strong> (число: цена квартиры).</li><li><strong>Без учителя (unsupervised)</strong> — меток нет. Задачи: <strong>кластеризация</strong> (группы похожих), понижение размерности (PCA).</li><li><strong>С подкреплением (reinforcement)</strong> — агент учится на <strong>наградах/штрафах</strong> (игры, роботы).</li></ul><p><strong>Понятия:</strong> <strong>признаки (features)</strong> — характеристики объекта; <strong>целевая переменная (target)</strong> — что предсказываем; делим на <strong>обучающую и тестовую</strong> выборки; <strong>функция потерь</strong> — мера ошибки, минимизируется (градиентный спуск); <strong>переобучение (overfitting)</strong> — вызубрил, но мажет на новых; <strong>недообучение</strong> — слишком прост.</p>',
+formal:'<p><span class="term">Машинное обучение</span> — раздел искусственного интеллекта, изучающий построение алгоритмов, обучающихся на данных без явного программирования правил.</p><p>Виды: <span class="term">обучение с учителем</span> (на размеченных данных; задачи классификации и регрессии); <span class="term">обучение без учителя</span> (на неразмеченных данных; задачи кластеризации и понижения размерности); <span class="term">обучение с подкреплением</span> (агент обучается через вознаграждение и штраф).</p><p>Основные понятия: признаки, целевая переменная, обучающая и тестовая выборки, функция потерь. Ключевая проблема — переобучение (модель не обобщается на новые данные).</p>',
+example:'<p>Цена квартиры (регрессия, с учителем): даём 5000 объявлений с признаками (площадь, район, этаж) и реальной ценой → модель находит зависимость → предсказывает цену новой квартиры. Если идеально «помнит» обучающие, но мажет на новых — это переобучение.</p>',
+remember:'С учителем (классификация/регрессия) — есть метки; без учителя (кластеризация) — нет; с подкреплением — награды. Признаки → target. Делим на train/test. Враг — переобучение.'
+},
+{
+id:8,cat:'sys',
+title:'Методологии разработки ПО',
+q:'Методологии разработки ПО. Виды и графическое отображение.',
+simple:'Методология разработки — «рецепт», как команда идёт от идеи к программе. Можно строго по шагам (как инструкция к мебели), можно порциями с правками (как лепить из глины). Вопрос: насколько рано и часто готовы менять курс.',
+explain:'<ul><li><strong>Каскадная (Waterfall)</strong> — этапы строго по очереди, назад не возвращаемся. Графика: <strong>ступеньки вниз</strong>. Минус — ошибка видна в конце.</li><li><strong>V-модель</strong> — каскад, сложенный буквой <strong>V</strong>: слева спуск (требования→код), справа подъём (тестирование). Каждому уровню проектирования соответствует уровень тестирования.</li><li><strong>Итерационная/инкрементная</strong> — продукт растёт кусками, повторяющиеся циклы.</li><li><strong>Спиральная (Боэма)</strong> — витки спирали, на каждом анализ <strong>рисков</strong>.</li><li><strong>Agile</strong> — короткие итерации, гибкость (см. вопрос 9).</li></ul>',
+formal:'<p><span class="term">Методология разработки ПО</span> — совокупность принципов и моделей организации процесса создания программного продукта.</p><p><span class="term">Каскадная модель</span> — последовательное выполнение этапов без возврата (изображается понижающимися ступенями). <span class="term">V-образная модель</span> — каскад в форме буквы V, где каждому этапу проектирования соответствует этап тестирования. <span class="term">Итерационная модель</span> — разработка приращениями (повторяющиеся циклы). <span class="term">Спиральная модель</span> — спираль с анализом рисков на витках. <span class="term">Гибкие методологии (Agile)</span> — короткие итерации с обратной связью.</p>',
+example:'<p>Сайт банка по каскаду: полгода собираем требования, полгода пишем — и узнаём, что бизнес передумал. По Agile: за 2 недели делаем минимальную рабочую версию, показываем, корректируем — и так раз за разом.</p>',
+remember:'Waterfall — ступеньки вниз, строго по очереди. V-модель — буква V, упор на тестирование. Спиральная — витки + риски. Agile — короткие итерации. Чем правее — тем легче менять требования.'
+},
+{
+id:9,cat:'sys',
+title:'Управление проектами: Agile, Scrum, Канбан',
+q:'Методологии управления проектами. Agile, Scrum, Канбан.',
+simple:'Вопрос 8 — как пишут код, этот — как организуют работу команды. <strong>Agile</strong> это философия («двигаемся гибко, маленькими шагами»), а Scrum и Канбан — конкретные способы жить по ней.',
+explain:'<p><strong>Agile</strong> — гибкий подход, манифест 2001 г. 4 ценности (левое важнее правого): люди важнее процессов; работающий продукт важнее документации; сотрудничество с заказчиком важнее контракта; готовность к изменениям важнее плана.</p><p><strong>Scrum</strong> — работа <strong>спринтами</strong> (1–4 недели):</p><ul><li><strong>Роли:</strong> Product Owner (ЧТО делать, ведёт backlog), Scrum Master (процесс, убирает помехи), Команда.</li><li><strong>Артефакты:</strong> Product Backlog, Sprint Backlog, Increment.</li><li><strong>Церемонии:</strong> планирование, ежедневный стендап (daily), обзор (review), ретроспектива.</li></ul><p><strong>Канбан</strong> — непрерывный поток без спринтов: <strong>доска</strong> (Сделать → В работе → Готово), <strong>WIP-лимит</strong> (ограничение задач в работе — заставляет доводить до конца), цель — визуализация и скорость прохождения.</p>',
+formal:'<p><span class="term">Agile</span> — группа гибких методологий на основе Манифеста 2001 г., провозглашающего приоритет: людей над процессами, работающего продукта над документацией, сотрудничества с заказчиком, готовности к изменениям. Конкретными реализациями являются Scrum и Канбан.</p><p><span class="term">Scrum</span> организует работу спринтами (итерациями 1–4 недели). Роли: владелец продукта, скрам-мастер, команда. Артефакты: бэклог продукта, бэклог спринта, инкремент. Мероприятия: планирование, ежедневные совещания, обзор, ретроспектива.</p><p><span class="term">Канбан</span> основан на визуализации работ на доске и ограничении числа задач в работе (WIP-лимит), реализуя непрерывный поток без фиксированных итераций.</p>',
+example:'<p>Scrum: команда берёт на 2 недели 8 задач, каждый день сверяется на стендапе, в конце показывает готовое. Канбан: задачи «текут» по доске, правило «не больше 3 в работе» — пока не закончишь, новую не берёшь.</p>',
+remember:'Agile — философия (манифест, 4 ценности). Scrum — спринты + 3 роли (PO, SM, команда) + церемонии. Канбан — доска + WIP-лимиты + поток. Scrum итерациями, Канбан потоком.'
+},
+{
+id:10,cat:'web',
+title:'Сети. Интернет. TCP/IP и OSI',
+q:'Основные понятия сетей. Сеть Интернет. Модель TCP/IP, OSI.',
+simple:'Чтобы два компьютера на разных концах планеты поняли друг друга, нужны общие правила — как почта. Чтобы не делать один запутанный свод, его разбили на <strong>уровни</strong>: каждый решает свою задачу. Письмо: текст (слой 1), конверт с адресом (слой 2), почта решает маршрут (слой 3), курьер везёт (слой 4).',
+explain:'<p><strong>Модель OSI</strong> — эталонная, <strong>7 уровней</strong> снизу вверх:</p><ul><li>1. <strong>Физический</strong> — биты, кабели.</li><li>2. <strong>Канальный</strong> — кадры, <strong>MAC-адреса</strong> (Ethernet, коммутаторы).</li><li>3. <strong>Сетевой</strong> — пакеты, <strong>IP</strong>, маршрутизация (роутеры).</li><li>4. <strong>Транспортный</strong> — <strong>TCP</strong> (надёжный, с подтверждением) / <strong>UDP</strong> (быстрый, без гарантий).</li><li>5. Сеансовый, 6. Представления (шифрование), 7. <strong>Прикладной</strong> (HTTP, FTP, DNS).</li></ul><p><strong>Модель TCP/IP</strong> — практическая, <strong>4 уровня</strong>: сетевого доступа (OSI 1–2), межсетевой/IP (OSI 3), транспортный (OSI 4), прикладной (OSI 5–7).</p><p>Понятия: <strong>IP</strong> (логический адрес), <strong>MAC</strong> (физический), <strong>порт</strong> (приложение), <strong>DNS</strong> (имя → IP).</p>',
+formal:'<p><span class="term">Компьютерная сеть</span> — совокупность взаимосвязанных узлов для обмена данными; Интернет — глобальная сеть на основе стека TCP/IP. Взаимодействие организуется по многоуровневой модели.</p><p><span class="term">Модель OSI</span> включает 7 уровней: физический, канальный (MAC-адреса), сетевой (IP, маршрутизация), транспортный (TCP, UDP), сеансовый, представления, прикладной (HTTP, FTP, DNS). <span class="term">Модель TCP/IP</span> — практическая, 4 уровня: канальный, межсетевой, транспортный, прикладной.</p><p>TCP обеспечивает надёжную передачу с подтверждением, UDP — быструю без гарантий. Адресация: IP (логический адрес), MAC (физический), порт (приложение), DNS (имя → IP).</p>',
+example:'<p>Открываешь сайт: DNS переводит имя в IP → TCP устанавливает надёжное соединение → данные дробятся на пакеты с IP-адресами → пакеты идут кадрами по проводам. На том конце всё собирается обратно.</p>',
+remember:'OSI — 7 уровней (эталон), TCP/IP — 4 (практика). Снизу: физический, канальный (MAC), сетевой (IP), транспортный (TCP/UDP), прикладной (HTTP). TCP надёжный, UDP быстрый. DNS: имя → IP.'
+},
+{
+id:11,cat:'hw',
+title:'Числа с фиксированной и плавающей запятой',
+q:'Представление чисел с фиксированной и плавающей запятой. Мантисса, одинарная и двойная точность.',
+simple:'Дробные числа нужно хранить конечным числом бит. Можно «прибить» запятую на одно место (фиксированная) — просто, но узко. А можно как в научной записи: <code>1.5 × 10⁸</code> — отдельно значащие цифры, отдельно «где запятая». Тогда запятая «плавает».',
+explain:'<p><strong>Фиксированная запятая</strong> — позиция точки задана жёстко. Просто, но узкий диапазон.</p><p><strong>Плавающая запятая (IEEE 754)</strong> — число = <strong>мантисса × основание^порядок</strong>. Биты: <strong>знак | порядок (экспонента) | мантисса</strong>. Мантисса — значащие цифры, порядок — масштаб («куда сдвинуть запятую»).</p><p><strong>Точность:</strong></p><ul><li><strong>float</strong> (одинарная) — <strong>32 бита</strong> (1+8+23), ~7 значащих цифр.</li><li><strong>double</strong> (двойная) — <strong>64 бита</strong> (1+11+52), ~15–16 цифр.</li></ul><p>Важно: <strong>не все дроби представимы точно</strong> (0.1 — бесконечная двоичная дробь). Поэтому <code>0.1 + 0.2 ≠ 0.3</code> и вещественные числа нельзя сравнивать на строгое равенство — только с допуском.</p>',
+formal:'<p>Вещественные числа представляются в форматах с фиксированной и плавающей запятой. В формате <span class="term">с фиксированной запятой</span> положение разделителя задано жёстко (просто, но узкий диапазон).</p><p>В формате <span class="term">с плавающей запятой</span> (стандарт IEEE 754) число хранится как мантисса × основание в степени порядка и состоит из полей: знак, порядок (экспонента), мантисса (значащие цифры).</p><p>Типы точности: <span class="term">float</span> (одинарная) — 32 бита, около 7 значащих цифр; <span class="term">double</span> (двойная) — 64 бита, около 15–16 цифр. Не все дроби представимы точно, поэтому сравнение вещественных чисел на равенство недопустимо.</p>',
+example:'<p>6.25 = 110.01₂ = 1.1001₂ × 2² → мантисса 1.1001, порядок 2. А 0.1 точно не ляжет — отсюда копеечные погрешности, поэтому деньги хранят в целых копейках, а не во float.</p>',
+remember:'Фиксированная — точка жёстко, узкий диапазон. Плавающая (IEEE 754) — знак/порядок/мантисса. float = 32 бита (~7 цифр), double = 64 бита (~16 цифр). Дроби неточны → не сравнивать на ==.'
+},
+{
+id:12,cat:'swd',
+title:'Принципы ООП',
+q:'Принципы объектно-ориентированного программирования. Примеры.',
+simple:'ООП — описывать программу через «объекты», как в реальном мире. Не куча функций вперемешку, а «объект <em>Машина</em>: у неё есть данные (скорость, цвет) и действия (ехать, тормозить), всё в одном месте». Ближе к тому, как мы мыслим.',
+explain:'<p><strong>Класс</strong> — чертёж (чертёж машины), <strong>объект</strong> — экземпляр (твоя красная машина). Четыре принципа:</p><ul><li><strong>Инкапсуляция</strong> — упаковать данные и методы вместе и <strong>скрыть внутренности</strong>. Снаружи только public-методы, внутренние private-поля спрятаны.</li><li><strong>Наследование</strong> — новый класс перенимает свойства родителя и добавляет своё (не дублировать код).</li><li><strong>Полиморфизм</strong> — один вызов, <strong>разное поведение</strong>. <code>животное.голос()</code> у собаки «гав», у кошки «мяу».</li><li><strong>Абстракция</strong> — выделить главное, спрятать детали (абстрактные классы, интерфейсы).</li></ul>',
+formal:'<p><span class="term">ООП</span> — парадигма, в которой программа представляется как совокупность взаимодействующих объектов. Класс — шаблон типа объектов, объект — его экземпляр.</p><p>Принципы: <span class="term">инкапсуляция</span> — объединение данных и методов с сокрытием реализации; <span class="term">наследование</span> — создание класса на основе существующего с заимствованием его свойств; <span class="term">полиморфизм</span> — способность объектов с общим интерфейсом проявлять разное поведение; <span class="term">абстракция</span> — выделение существенных характеристик и сокрытие деталей.</p>',
+example:'<pre><span class="cm">// абстракция: общая идея</span>\nclass Животное {\n  <span class="cm">private</span> возраст       <span class="cm">// инкапсуляция</span>\n  голос() { ... }\n}\n<span class="cm">// наследование</span>\nclass Собака extends Животное {\n  голос() { return "Гав" }   <span class="cm">// полиморфизм</span>\n}</pre><p>Вызов <code>списокЖивотных.forEach(ж =&gt; ж.голос())</code> — каждый ответит по-своему. Это полиморфизм в действии.</p>',
+remember:'Класс — шаблон, объект — экземпляр. 4 принципа: инкапсуляция (скрыть данные), наследование (перенять и расширить), полиморфизм (один интерфейс — разное поведение), абстракция (выделить главное).'
+},
+{
+id:13,cat:'db',
+title:'Code First / Database First. MVC',
+q:'Принципы построения модели Code First и Database First. Как реализуется логика и представление в MVC.',
+simple:'В приложении есть код (классы) и база данных (таблицы). Что первым? Можно сначала нарисовать таблицы, а классы под них сгенерировать (<strong>Database First</strong>). Или сначала классы, а БД создастся под них (<strong>Code First</strong>). Связь между ними — <strong>ORM</strong>.',
+explain:'<p><strong>ORM (Object-Relational Mapping)</strong> связывает объекты в коде с таблицами в БД (например, Entity Framework). Класс ↔ таблица, поле ↔ столбец, объект ↔ строка.</p><ul><li><strong>Database First</strong> — БД → ORM генерирует классы. Удобно, если БД уже есть.</li><li><strong>Code First</strong> — классы → ORM создаёт БД через <strong>миграции</strong>. Удобно для новых проектов.</li></ul><p><strong>В MVC:</strong> <strong>Model</strong> — классы данных + работа с БД (ORM) + логика; <strong>View</strong> — шаблоны (Razor, HTML), только отображение; <strong>Controller</strong> — принимает запрос, берёт данные из Model, передаёт во View.</p><p>Поток: запрос → роутинг → Controller → Model (данные из БД через ORM) → View (рендер HTML) → ответ.</p>',
+formal:'<p>Подходы определяют порядок построения модели и базы данных при использовании ORM (объектно-реляционного отображения). При <span class="term">Database First</span> сначала создаётся база данных, по ней генерируются классы. При <span class="term">Code First</span> сначала создаются классы, по ним через миграции строится база данных.</p><p>В паттерне MVC: <span class="term">Model</span> — классы данных, работа с БД через ORM и логика; <span class="term">View</span> — отображение; <span class="term">Controller</span> — принимает запрос, обращается к модели и передаёт данные представлению. Схема: запрос → контроллер → модель → представление → ответ.</p>',
+example:'<pre><span class="cm">// Code First</span>\nclass Product { Id, Name, Price }\n<span class="cm">// миграция → EF создаёт таблицу Products</span>\n\n<span class="cm">// в контроллере</span>\nvar items = db.Products.ToList();\n<span class="cm">// → передаём во View → рисуется таблица товаров</span></pre>',
+remember:'ORM связывает классы и таблицы. Database First: БД → классы. Code First: классы → БД (миграции). MVC: Model (данные+ORM+логика), View (отображение), Controller (связь, обработка запроса).'
+},
+{
+id:14,cat:'swd',
+title:'Принципы проектирования: SOLID, KISS, DRY',
+q:'Принципы проектирования программ. SOLID. KISS. DRY.',
+simple:'«Правила гигиены» для кода, чтобы он не превратился в кашу, которую страшно трогать. Главная мысль: <strong>код меняют чаще, чем пишут</strong> — пиши так, чтобы изменения были лёгкими и не ломали всё подряд.',
+explain:'<p><strong>SOLID</strong> — пять принципов:</p><ul><li><strong>S — Single Responsibility:</strong> у класса одна ответственность, одна причина для изменения.</li><li><strong>O — Open/Closed:</strong> открыт для расширения, закрыт для изменения (новое — новым кодом).</li><li><strong>L — Liskov Substitution:</strong> наследник можно подставить вместо родителя без поломки.</li><li><strong>I — Interface Segregation:</strong> много узких интерфейсов лучше одного огромного.</li><li><strong>D — Dependency Inversion:</strong> зависеть от абстракций, а не от конкретных классов.</li></ul><p><strong>KISS</strong> (Keep It Simple) — делай проще. <strong>DRY</strong> (Don\'t Repeat Yourself) — не дублируй код. Бонус: <strong>YAGNI</strong> — не пиши «про запас».</p>',
+formal:'<p>Принципы проектирования направлены на создание сопровождаемого и расширяемого кода.</p><p><span class="term">SOLID</span> — пять принципов: единственной ответственности (одна причина для изменения класса); открытости/закрытости (открыт для расширения, закрыт для модификации); подстановки Лисков (подкласс заменяет базовый класс); разделения интерфейсов (узкие интерфейсы вместо одного общего); инверсии зависимостей (зависимость от абстракций).</p><p><span class="term">KISS</span> — стремление к простоте решений. <span class="term">DRY</span> — исключение дублирования кода.</p>',
+example:'<p>Нарушение SRP: класс <code>User</code> сам валидирует, сохраняет в БД и шлёт email — три причины для изменений. Исправление: <code>User</code>, <code>UserValidator</code>, <code>UserRepository</code>, <code>EmailService</code> — у каждого одна задача. Нарушение DRY: расчёт скидки скопирован в 5 местах → выносим в <code>calcDiscount()</code>.</p>',
+remember:'SOLID: SRP (одна ответственность), OCP (расширяем, не меняем), LSP (наследник заменяет родителя), ISP (узкие интерфейсы), DIP (зависим от абстракций). KISS — проще. DRY — не повторяйся.'
+},
+{
+id:15,cat:'db',
+title:'Проектирование БД. Нормальные формы',
+q:'Проектирование баз данных. Концептуальный, логический, физический уровень. Нормальные формы.',
+simple:'Проектирование БД идёт «сверху вниз»: сначала рисуем какие сущности и связи есть (не думая о технике), потом превращаем в таблицы, потом — в реализацию под конкретную СУБД. <strong>Нормализация</strong> — наведение порядка, чтобы не было дублей и противоречий.',
+explain:'<p><strong>Три уровня:</strong></p><ul><li><strong>Концептуальный</strong> — <strong>ER-диаграмма</strong> (сущность–связь), без привязки к технологии.</li><li><strong>Логический</strong> — таблицы, ключи, нормализация. Привязка к типу СУБД (реляционная).</li><li><strong>Физический</strong> — типы столбцов, <strong>индексы</strong>, размещение на диске под конкретную СУБД.</li></ul><p><strong>Нормальные формы</strong> убирают избыточность и аномалии:</p><ul><li><strong>1НФ</strong> — атомарность (в ячейке одно значение, не список).</li><li><strong>2НФ</strong> — 1НФ + неключевые зависят от <strong>всего</strong> ключа (нет частичных зависимостей).</li><li><strong>3НФ</strong> — 2НФ + нет <strong>транзитивных</strong> зависимостей (неключевой не зависит от неключевого).</li><li><strong>НФБК</strong> — усиленная 3НФ.</li></ul><p>Цель — каждый факт хранится <strong>в одном месте</strong>.</p>',
+formal:'<p>Проектирование БД ведётся на трёх уровнях: <span class="term">концептуальном</span> (модель «сущность-связь», ER-диаграмма, без привязки к СУБД); <span class="term">логическом</span> (преобразование в таблицы, ключи, связи, нормализация); <span class="term">физическом</span> (типы данных, индексы, реализация в конкретной СУБД).</p><p><span class="term">Нормализация</span> устраняет избыточность и аномалии. 1НФ — атомарность значений атрибутов. 2НФ — 1НФ и полная зависимость неключевых атрибутов от первичного ключа. 3НФ — 2НФ и отсутствие транзитивных зависимостей. НФБК — усиление 3НФ.</p>',
+example:'<p>Плохо: <code>Заказ(номер, товары="яблоки, груши", город, индекс)</code>. Нарушает 1НФ (список в ячейке) → разбиваем на строки. Нарушает 3НФ (индекс зависит от города, не от заказа) → выносим <code>Город(город, индекс)</code>. После этого поменялся индекс — правим в одном месте.</p>',
+remember:'Уровни: концептуальный (ER) → логический (таблицы + нормализация) → физический (типы, индексы). НФ: 1НФ (атомарность), 2НФ (зависимость от всего ключа), 3НФ (нет транзитивных). Цель — каждый факт в одном месте.'
+},
+{
+id:16,cat:'web',
+title:'Протокол HTTP, методы. FTP',
+q:'Протокол HTTP, методы HTTP-запроса. Протокол FTP.',
+simple:'HTTP — язык, на котором браузер говорит с сервером: «дай страницу» / «вот данные формы». Особенность — он <strong>«забывчивый» (без состояния)</strong>: каждый запрос обрабатывает как впервые. FTP — отдельный протокол для перекачки файлов.',
+explain:'<p><strong>HTTP</strong> — прикладной протокол поверх TCP, схема <strong>запрос–ответ</strong>, <strong>stateless</strong>. Порт <strong>80</strong>, защищённый <strong>HTTPS</strong> (TLS) — <strong>443</strong>. Состояние держат через cookie/сессии/токены.</p><p><strong>Методы:</strong></p><ul><li><strong>GET</strong> — получить (без тела, идемпотентный).</li><li><strong>POST</strong> — создать/отправить.</li><li><strong>PUT</strong> — заменить целиком; <strong>PATCH</strong> — частично; <strong>DELETE</strong> — удалить.</li><li><strong>HEAD</strong> — только заголовки; <strong>OPTIONS</strong> — какие методы поддерживаются.</li></ul><p><strong>Коды:</strong> 2xx успех (200 OK, 201), 3xx перенаправление (301, 302), 4xx ошибка клиента (400, 401, 403, 404), 5xx ошибка сервера (500, 502, 503).</p><p><strong>FTP</strong> — передача файлов поверх TCP, <strong>два канала</strong>: управляющий (порт <strong>21</strong>) и данных (порт <strong>20</strong>). Режимы: <strong>активный</strong> (сервер открывает соединение к клиенту) и <strong>пассивный</strong> (клиент сам — за NAT/фаерволом). Незащищён → FTPS/SFTP.</p>',
+formal:'<p><span class="term">HTTP</span> — прикладной протокол передачи гипертекста поверх TCP по модели «запрос-ответ»; не сохраняет состояние (stateless). Порт 80; защищённая версия HTTPS (с TLS) — порт 443.</p><p>Методы: GET (получение), POST (создание), PUT (полное обновление), PATCH (частичное), DELETE (удаление), HEAD, OPTIONS. Коды ответа: 2xx — успех, 3xx — перенаправление, 4xx — ошибка клиента, 5xx — ошибка сервера.</p><p><span class="term">FTP</span> — протокол передачи файлов поверх TCP, использует два соединения: управляющее (порт 21) и для данных (порт 20). Режимы — активный и пассивный. Незащищён, поэтому применяются FTPS и SFTP.</p>',
+example:'<p>Регистрация: браузер шлёт <code>POST /register</code> с данными формы в теле → сервер создаёт пользователя → отвечает <code>200 OK</code> (или <code>400</code>, если данные кривые). Открытие профиля: <code>GET /profile/123</code> → возвращается страница.</p>',
+remember:'HTTP — stateless, запрос-ответ, поверх TCP (80/443). Методы: GET, POST, PUT, PATCH, DELETE, HEAD, OPTIONS. Коды: 200/301/404/500. FTP — два канала (21 управление, 20 данные), активный/пассивный, незащищён.'
+},
+{
+id:17,cat:'db',
+title:'Реляционная алгебра',
+q:'Реляционная алгебра. Отношение, схема, атрибуты. Операции над отношениями.',
+simple:'Реляционная алгебра — «математика таблиц», теоретический фундамент под SQL. Описывает строгими операциями то, что ты делаешь запросами: отбери строки, отбери столбцы, соедини таблицы. SQL — практичная надстройка над этим.',
+explain:'<p><strong>Базовые понятия:</strong></p><ul><li><strong>Отношение (relation)</strong> — таблица (множество кортежей).</li><li><strong>Схема</strong> — «шапка»: имя + атрибуты с типами.</li><li><strong>Атрибут</strong> — столбец (имя + <strong>домен</strong>, т.е. множество допустимых значений).</li><li><strong>Кортеж (tuple)</strong> — строка.</li><li><strong>Степень</strong> — число атрибутов, <strong>кардинальность</strong> — число кортежей.</li></ul><p><strong>Операции:</strong></p><ul><li><strong>Выборка (селекция) σ</strong> — отбор <strong>строк</strong> по условию.</li><li><strong>Проекция π</strong> — отбор <strong>столбцов</strong>.</li><li><strong>∪, ∩, −</strong> — объединение, пересечение, разность.</li><li><strong>Декартово произведение ×</strong>, <strong>соединение JOIN ⋈</strong> (= × + σ), <strong>деление ÷</strong>.</li></ul>',
+formal:'<p><span class="term">Реляционная алгебра</span> — формальный аппарат операций над отношениями, теоретическая основа SQL.</p><p>Понятия: <span class="term">отношение</span> — таблица (множество кортежей); <span class="term">схема</span> — имя отношения и набор атрибутов; <span class="term">атрибут</span> — столбец со значениями из домена; <span class="term">кортеж</span> — строка.</p><p>Операции: выборка (σ) — отбор строк по условию; проекция (π) — отбор столбцов; объединение, пересечение, разность; декартово произведение (×); соединение (⋈) — связывание по условию; деление (÷).</p>',
+example:'<p>«Имена студентов старше 18 из группы 101»: <code>π имя ( σ возраст&gt;18 ∧ группа=\'101\' (Студенты) )</code>. Сначала селекция отбирает строки, потом проекция оставляет столбец «имя». На SQL: <code>SELECT имя FROM Студенты WHERE возраст&gt;18 AND группа=\'101\'</code>.</p>',
+remember:'Отношение = таблица, схема = шапка, атрибут = столбец, кортеж = строка, домен = тип. Операции: σ (строки), π (столбцы), ∪/∩/−, × (декартово), ⋈ JOIN (=×+σ), ÷. Это теория под SQL.'
+},
+{
+id:18,cat:'db',
+title:'СУБД. Типы, основные понятия',
+q:'Системы управления базами данных (СУБД). Типы СУБД, основные понятия.',
+simple:'База данных — это сами данные. <strong>СУБД</strong> — программа-«управляющий»: хранит данные, ищет, защищает и даёт доступ многим пользователям сразу. Без СУБД ты бы вручную копался в файлах.',
+explain:'<p><strong>СУБД (DBMS)</strong> — ПО для создания, хранения и управления БД: хранение, поиск, целостность, безопасность, многопользовательский доступ.</p><p><strong>Типы по модели данных:</strong></p><ul><li><strong>Иерархические</strong> (дерево), <strong>сетевые</strong> (граф) — устаревшие.</li><li><strong>Реляционные (РСУБД)</strong> — таблицы, язык <strong>SQL</strong>: PostgreSQL, MySQL, MS SQL, Oracle.</li><li><strong>Объектно-ориентированные</strong>.</li><li><strong>NoSQL</strong>: документные (MongoDB), ключ-значение (Redis), колоночные (Cassandra), графовые (Neo4j).</li></ul><p><strong>Понятия:</strong> таблица, запись, поле, <strong>первичный ключ</strong> (уникально идентифицирует строку), <strong>внешний ключ</strong> (связь с другой таблицей), <strong>индекс</strong> (быстрый поиск, обычно B-дерево), представление (view), транзакция, ACID.</p>',
+formal:'<p><span class="term">СУБД</span> — комплекс программных средств для создания, хранения и управления базами данных с обеспечением целостности и многопользовательского доступа.</p><p>Типы по модели данных: иерархические, сетевые, <span class="term">реляционные</span> (таблицы, язык SQL — PostgreSQL, MySQL, Oracle), объектно-ориентированные, <span class="term">NoSQL</span> (документоориентированные, «ключ-значение», колоночные, графовые).</p><p>Основные понятия: таблица, запись, поле, первичный ключ, внешний ключ (связь между таблицами), индекс, транзакция, ACID.</p>',
+example:'<p>Интернет-магазин: товары, заказы, клиенты — в реляционную СУБД (PostgreSQL) со связями «заказ → клиент». Сессии и корзину для скорости — в Redis (ключ-значение). Логи кликов для аналитики — в колоночной БД.</p>',
+remember:'СУБД — программа управления данными. Типы: иерархические, сетевые, реляционные (SQL), объектные, NoSQL (документные/ключ-значение/колоночные/графовые). Понятия: первичный/внешний ключ, индекс, транзакция, ACID.'
+},
+{
+id:19,cat:'alg',
+title:'Сортировки. Сложность. P, NP',
+q:'Сортировка данных. Виды сортировки, оценка сложности. P, NP, NP-трудная задача.',
+simple:'Отсортировать список можно по-разному, и способы сильно отличаются по скорости. <strong>O-нотация</strong> говорит, как растёт время при росте данных, не привязываясь к компьютеру. А классы P/NP — про то, какие задачи решаются быстро, а какие «безнадёжно» долго.',
+explain:'<p><strong>Сортировки:</strong></p><ul><li><strong>Пузырьковая, выбором, вставками</strong> — <strong>O(n²)</strong>, простые, медленные (вставки хороши на почти отсортированных).</li><li><strong>Быстрая (quicksort)</strong> — в среднем <strong>O(n log n)</strong>, в худшем O(n²). На практике самая быстрая.</li><li><strong>Слиянием (merge)</strong> — всегда <strong>O(n log n)</strong>, устойчива, нужна доп. память.</li><li><strong>Пирамидальная (heap)</strong> — O(n log n).</li></ul><p>Нижняя граница сортировки сравнениями — <strong>O(n log n)</strong>.</p><p><strong>Классы сложности:</strong></p><ul><li><strong>P</strong> — решаются за полиномиальное время (быстро).</li><li><strong>NP</strong> — решение можно быстро <strong>проверить</strong> (но не обязательно найти). Пример: судоку.</li><li><strong>NP-полные</strong> — самые трудные в NP; решишь одну за P — решатся все.</li><li><strong>NP-трудные</strong> — не легче NP-полных, могут не входить в NP. Вопрос <strong>P = NP?</strong> открыт.</li></ul>',
+formal:'<p><span class="term">Сортировка</span> — упорядочение элементов по критерию; эффективность оценивается асимптотической сложностью (О-нотацией).</p><p>Простые сортировки (пузырьком, выбором, вставками) — O(n²). Эффективные — O(n log n): быстрая (в среднем), слиянием (всегда, устойчивая), пирамидальная. Нижняя граница сортировки сравнениями — O(n log n).</p><p>Классы сложности задач: <span class="term">P</span> — разрешимы за полиномиальное время; <span class="term">NP</span> — решение проверяется за полиномиальное время; <span class="term">NP-полные</span> — наиболее сложные в NP; <span class="term">NP-трудные</span> — не менее сложны, чем NP-полные. Вопрос P = NP открыт.</p>',
+example:'<p>Сортировка 1000 элементов: пузырьком ~1 000 000 операций (n²), быстрой ~10 000 (n log n) — в 100 раз быстрее. На больших данных выбор алгоритма критичен.</p>',
+remember:'O(n²): пузырёк, вставки, выбор. O(n log n): quicksort (среднее), merge (всегда, устойчива), heap. Быстрее n log n сравнениями нельзя. P — решается быстро, NP — проверяется быстро, NP-полные — самые трудные. P=NP открыт.'
+},
+{
+id:20,cat:'alg',
+title:'Структуры данных: списки, массивы, стек, очередь',
+q:'Структуры данных. Списки, массивы, deque, queue, stack.',
+simple:'Структура данных — способ хранить данные удобно под задачу. Быстро брать по номеру — массив. Часто вставлять в середину — список. «Последний пришёл — первый вышел» — стек. «Первый пришёл — первый вышел» — очередь.',
+explain:'<ul><li><strong>Массив (array)</strong> — элементы подряд в памяти. Доступ по индексу <strong>O(1)</strong>, но вставка в середину <strong>O(n)</strong>, размер фиксирован.</li><li><strong>Связный список</strong> — узлы со ссылками. Вставка/удаление <strong>O(1)</strong> (если знаешь куда), доступ по индексу <strong>O(n)</strong>. Бывает одно-/двусвязный, кольцевой.</li><li><strong>Стек (stack)</strong> — <strong>LIFO</strong> (стопка тарелок): push, pop, peek — O(1). Стек вызовов, Undo.</li><li><strong>Очередь (queue)</strong> — <strong>FIFO</strong> (очередь в магазине): enqueue, dequeue. Обработка задач, BFS.</li><li><strong>Дек (deque)</strong> — добавление/удаление с <strong>обоих концов</strong>, универсальна.</li></ul>',
+formal:'<p><span class="term">Структура данных</span> — способ организации данных для эффективного выполнения операций.</p><p><span class="term">Массив</span> — элементы в непрерывной памяти; доступ по индексу за O(1), вставка в середину за O(n). <span class="term">Связный список</span> — узлы со ссылками; вставка за O(1), доступ по индексу за O(n).</p><p><span class="term">Стек</span> работает по принципу LIFO (последним пришёл — первым вышел). <span class="term">Очередь</span> — по принципу FIFO (первым пришёл — первым вышел). <span class="term">Дек</span> допускает добавление и удаление с обоих концов.</p>',
+example:'<p>Кнопка «Назад» в браузере — стек: каждый переход кладём в стопку, «Назад» снимает верхний. Печать документов — очередь: какой файл отправил первым, тот первым и напечатается.</p>',
+remember:'Массив — доступ O(1), вставка в середину O(n). Список — вставка O(1), доступ O(n). Стек — LIFO (стопка тарелок). Очередь — FIFO (очередь в магазине). Дек — оба конца.'
+},
+{
+id:21,cat:'db',
+title:'Транзакции. Блокировки. Уровни изоляции',
+q:'Транзакции. Определение, блокировки транзакций, уровни изоляции.',
+simple:'Транзакция — «всё или ничего». Перевод денег: списать у одного и зачислить другому — две операции, но выполниться должны <strong>обе или ни одной</strong>. А когда транзакций много сразу, нужно следить, чтобы не мешали друг другу — за это отвечают блокировки и уровни изоляции.',
+explain:'<p><strong>Транзакция</strong> — неделимая группа операций. Свойства <strong>ACID</strong>:</p><ul><li><strong>A — Atomicity:</strong> всё или ничего, при сбое откат.</li><li><strong>C — Consistency:</strong> БД остаётся корректной.</li><li><strong>I — Isolation:</strong> параллельные транзакции не мешают.</li><li><strong>D — Durability:</strong> после commit данные сохранятся даже при сбое.</li></ul><p><strong>Блокировки:</strong> <strong>Shared (S)</strong> — на чтение (несколько сразу), <strong>Exclusive (X)</strong> — на запись (одна). Опасность — <strong>deadlock</strong>.</p><p><strong>Аномалии:</strong> грязное чтение, неповторяющееся чтение, фантомное чтение.</p><p><strong>Уровни изоляции</strong> (слабый → сильный): <strong>Read Uncommitted</strong> (грязное чтение) → <strong>Read Committed</strong> (нет грязного) → <strong>Repeatable Read</strong> (нет неповторяющегося) → <strong>Serializable</strong> (нет и фантомов, самый строгий).</p>',
+formal:'<p><span class="term">Транзакция</span> — неделимая последовательность операций над БД по принципу «всё или ничего». Свойства <span class="term">ACID</span>: атомарность (всё или ничего), согласованность (БД остаётся целостной), изолированность (транзакции не влияют друг на друга), долговечность (результат сохраняется при сбое).</p><p>Изоляция реализуется блокировками: разделяемая (Shared) на чтение, монопольная (Exclusive) на запись. Аномалии: грязное, неповторяющееся и фантомное чтение.</p><p>Уровни изоляции (по усилению): Read Uncommitted, Read Committed, Repeatable Read, Serializable.</p>',
+example:'<p>Перевод 1000 ₽: «списать у A» + «зачислить B». Сервер упал после списания → благодаря <strong>атомарности</strong> обе операции откатятся, деньги не пропадут. Если A в этот момент смотрит баланс → благодаря <strong>изоляции</strong> не увидит «полупереведённое» состояние.</p>',
+remember:'Транзакция — всё или ничего. ACID: атомарность, согласованность, изолированность, долговечность. Блокировки S (чтение) / X (запись), опасность — deadlock. Уровни: Read Uncommitted → Read Committed → Repeatable Read → Serializable.'
+},
+{
+id:22,cat:'sys',
+title:'Языки моделирования: UML, IDEF0, IDEF1X',
+q:'Языки моделирования данных. UML, IDEF0, IDEFX.',
+simple:'Прежде чем строить систему, её рисуют — как архитектор чертёж до стройки. Языки моделирования — стандартные «нотации», чтобы все понимали схему одинаково. <strong>UML</strong> — про объектные системы, <strong>IDEF0</strong> — про функции/процессы, <strong>IDEF1X</strong> — про структуру данных.',
+explain:'<p><strong>UML</strong> — универсальный язык моделирования ПО, две группы диаграмм:</p><ul><li><strong>Структурные</strong> (что система есть): <strong>классов</strong> (главная — классы, атрибуты, методы, связи), компонентов, развёртывания.</li><li><strong>Поведенческие</strong> (как работает): <strong>вариантов использования (use case)</strong>, последовательности (sequence), деятельности (activity), состояний (state).</li></ul><p><strong>IDEF0</strong> — функциональное моделирование. Система = блоки-функции, стрелки <strong>ICOM</strong>: <strong>I</strong>nput (вход слева), <strong>C</strong>ontrol (управление сверху), <strong>O</strong>utput (выход справа), <strong>M</strong>echanism (механизм снизу). Декомпозиция сверху вниз.</p><p><strong>IDEF1X</strong> — моделирование данных (разновидность ER): сущности, атрибуты, ключи, связи для реляционной БД.</p>',
+formal:'<p><span class="term">Языки моделирования</span> — формализованные нотации для графического описания системы.</p><p><span class="term">UML</span> — язык объектного моделирования; диаграммы делятся на структурные (классов, компонентов) и поведенческие (вариантов использования, последовательности, деятельности, состояний). Главная — диаграмма классов.</p><p><span class="term">IDEF0</span> — функциональное моделирование: система как блоки-функции со стрелками ICOM (вход, управление, выход, механизм), декомпозиция сверху вниз. <span class="term">IDEF1X</span> — моделирование данных (разновидность «сущность-связь») для проектирования реляционных БД.</p>',
+example:'<p>Интернет-магазин: <strong>use case</strong> показывает действия («Клиент → оформить заказ»); <strong>диаграмма классов</strong> — классы Товар, Заказ, Клиент; <strong>IDEF0</strong> — процесс «Обработать заказ» (вход: заявка; управление: правила скидок; механизм: менеджер; выход: отгрузка); <strong>IDEF1X</strong> — структуру таблиц БД.</p>',
+remember:'UML — объектное моделирование: структурные (классов) и поведенческие (use case, sequence, activity, state). IDEF0 — функции, стрелки ICOM (вход-управление-выход-механизм), декомпозиция сверху вниз. IDEF1X — данные (сущности-связи).'
+}
+];
+
+/* ---------- STATE ---------- */
+const learned=new Set();
+let curCat='all';
+let curSearch='';
+let mode='grid';
+let lessonId=null;
+
+const ICONS={
+  simple:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M2 12h2M20 12h2M5 5l1.5 1.5M17.5 17.5L19 19M19 5l-1.5 1.5M6.5 17.5L5 19"/></svg>',
+  explain:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M2 3h7a3 3 0 0 1 3 3v13a2.5 2.5 0 0 0-2.5-2.5H2z"/><path d="M22 3h-7a3 3 0 0 0-3 3v13a2.5 2.5 0 0 1 2.5-2.5H22z"/></svg>',
+  example:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="m8 6-6 6 6 6M16 6l6 6-6 6"/></svg>',
+  remember:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M12 2 4 5v6c0 5 3.5 8 8 11 4.5-3 8-6 8-11V5z"/><path d="m9 12 2 2 4-4"/></svg>',
+  formal:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6M9 13h6M9 17h6"/></svg>'
+};
+
+const view=document.getElementById('view');
+
+/* ---------- ГЛОССАРИЙ: краткие пояснения вторичных терминов ---------- */
+/* Ключи в нижнем регистре. Подсветятся в тексте уроков автоматически. */
+const GLOSSARY={
+  'DOM':'Document Object Model — представление HTML-страницы в виде дерева объектов, которое можно менять из JavaScript.',
+  'ORM':'Object-Relational Mapping — технология, автоматически связывающая классы программы с таблицами базы данных.',
+  'TLS':'Transport Layer Security — протокол шифрования, обеспечивающий защищённое соединение (основа HTTPS).',
+  'TCP':'Transmission Control Protocol — протокол надёжной передачи данных с подтверждением доставки.',
+  'UDP':'User Datagram Protocol — протокол быстрой передачи данных без гарантии доставки (для видео, игр).',
+  'IP':'Internet Protocol — протокол адресации и маршрутизации пакетов в сети; IP-адрес идентифицирует узел.',
+  'MAC-адрес':'Физический адрес сетевой карты устройства, используется на канальном уровне.',
+  'MAC':'Физический адрес сетевой карты устройства, используется на канальном уровне.',
+  'DNS':'Domain Name System — служба, переводящая доменное имя (mpgu.su) в IP-адрес.',
+  'HTTPS':'Защищённая версия HTTP с шифрованием TLS (порт 443).',
+  'TLS':'Протокол шифрования, обеспечивающий защищённое соединение (основа HTTPS).',
+  'SQL':'Structured Query Language — язык запросов к реляционным базам данных.',
+  'NAT':'Network Address Translation — технология, скрывающая частные адреса сети за одним внешним IP; усложняет входящие соединения.',
+  'миграции':'Механизм пошагового изменения структуры базы данных с сохранением версий (в подходе Code First).',
+  'миграций':'Механизм пошагового изменения структуры базы данных с сохранением версий (в подходе Code First).',
+  'идемпотентный':'Свойство операции: повторное выполнение даёт тот же результат, что и однократное (например, GET).',
+  'идемпотентный)':'Свойство операции: повторное выполнение даёт тот же результат, что и однократное (например, GET).',
+  'кэш':'Сверхбыстрая промежуточная память, хранящая часто используемые данные для ускорения доступа.',
+  'кэш-памяти':'Сверхбыстрая промежуточная память, хранящая часто используемые данные для ускорения доступа.',
+  'регистры':'Сверхбыстрые ячейки памяти внутри процессора для хранения текущих операндов.',
+  'АЛУ':'Арифметико-логическое устройство — часть процессора, выполняющая вычисления и логические операции.',
+  'УУ':'Устройство управления — часть процессора, которая декодирует команды и управляет работой узлов.',
+  'CISC':'Complex Instruction Set Computer — процессоры с большим набором сложных команд (x86).',
+  'RISC':'Reduced Instruction Set Computer — процессоры с малым набором простых команд (ARM).',
+  'микроконтроллер':'Миниатюрный компьютер на одном чипе для управления устройствами (бытовая техника, авто).',
+  'микроконтроллеры':'Миниатюрные компьютеры на одном чипе для управления устройствами.',
+  'микроконтроллерах':'Миниатюрные компьютеры на одном чипе для управления устройствами.',
+  'функция Эйлера':'Математическая функция φ(n): количество чисел до n, взаимно простых с n. Используется в RSA.',
+  'φ(n)':'Функция Эйлера: количество чисел до n, взаимно простых с n.',
+  'факторизации':'Разложение числа на простые множители. Для больших чисел вычислительно очень сложно — на этом основан RSA.',
+  'факторизация':'Разложение числа на простые множители; для больших чисел очень сложно.',
+  'взаимно простое':'Два числа взаимно просты, если их наибольший общий делитель равен 1.',
+  'взаимно просто':'Два числа взаимно просты, если их наибольший общий делитель равен 1.',
+  'ЭЦП':'Электронная цифровая подпись — подтверждает авторство и целостность данных через закрытый ключ.',
+  'PCA':'Principal Component Analysis — метод понижения размерности данных с сохранением главной информации.',
+  'кластеризация':'Задача обучения без учителя: автоматическое разбиение объектов на группы похожих.',
+  'регрессия':'Задача обучения с учителем: предсказание числового значения (цена, температура).',
+  'классификация':'Задача обучения с учителем: предсказание категории объекта (спам/не спам).',
+  'функция потерь':'Мера ошибки модели; обучение сводится к её минимизации.',
+  'градиентным спуском':'Метод оптимизации: пошаговое движение к минимуму функции потерь.',
+  'переобучение':'Ситуация, когда модель запомнила обучающие данные, но плохо работает на новых.',
+  'data binding':'Привязка данных — автоматическая синхронизация значений интерфейса и переменных программы.',
+  'двусторонняя привязка данных':'Изменения в интерфейсе и в данных автоматически отражаются друг в друге.',
+  'Razor':'Шаблонизатор в ASP.NET: позволяет вставлять C#-код в HTML для генерации страниц.',
+  'WIP-лимит':'Work In Progress limit — ограничение числа задач, выполняемых одновременно (в Канбан).',
+  'WIP-лимиты':'Ограничение числа задач, выполняемых одновременно (в Канбан).',
+  'бэклог':'Упорядоченный список задач проекта (Product Backlog) или спринта (Sprint Backlog).',
+  'инкремент':'Готовый работающий результат, полученный за один спринт в Scrum.',
+  'спринт':'Фиксированная итерация в Scrum (1–4 недели), за которую делается часть продукта.',
+  'спринтами':'Фиксированными итерациями в Scrum (1–4 недели).',
+  'мантисса':'Значащие цифры числа в формате с плавающей запятой.',
+  'порядок':'Показатель степени (экспонента) в числе с плавающей запятой; задаёт масштаб.',
+  'экспонента':'Показатель степени в числе с плавающей запятой; задаёт масштаб.',
+  'IEEE 754':'Международный стандарт представления чисел с плавающей запятой в компьютерах.',
+  'атомарность':'Свойство транзакции: выполняется либо полностью, либо не выполняется вовсе.',
+  'домен':'Множество допустимых значений атрибута (по сути — его тип).',
+  'домена':'Множество допустимых значений атрибута (по сути — его тип).',
+  'первичный ключ':'Атрибут (или набор), уникально идентифицирующий каждую запись в таблице.',
+  'внешний ключ':'Атрибут, ссылающийся на первичный ключ другой таблицы; реализует связь между таблицами.',
+  'индекс':'Структура данных (обычно B-дерево), ускоряющая поиск записей в таблице.',
+  'индексы':'Структуры данных, ускоряющие поиск записей в таблице.',
+  'транзитивных':'Транзитивная зависимость: A зависит от B, B от C, значит A косвенно зависит от C.',
+  'транзитивные':'Зависимость A→B→C, при которой A косвенно зависит от C.',
+  'атомарность значений':'Каждая ячейка таблицы содержит одно неделимое значение, а не список.',
+  'deadlock':'Взаимоблокировка: две транзакции бесконечно ждут ресурсы, занятые друг другом.',
+  'грязное чтение':'Чтение данных, изменённых другой транзакцией, которая ещё не подтверждена и может откатиться.',
+  'фантомное чтение':'Повторный запрос возвращает новые строки, добавленные другой транзакцией.',
+  'неповторяющееся чтение':'Повторное чтение той же строки даёт другое значение из-за изменения другой транзакцией.',
+  'ICOM':'Input-Control-Output-Mechanism — четыре вида стрелок блока в IDEF0: вход, управление, выход, механизм.',
+  'декомпозиция':'Разбиение сложной функции или системы на более простые составные части.',
+  'устойчивая':'Свойство сортировки: сохраняет исходный порядок равных элементов.',
+  'асимптотической сложностью':'Оценка роста числа операций алгоритма при увеличении объёма данных (O-нотация).',
+  'О-нотацией':'Способ записи асимптотической сложности, например O(n), O(n log n).',
+  'полиномиальное время':'Время работы, растущее как степень размера входа (n², n³…) — считается «быстрым».',
+  'кэшах L1':'Кэш-память первого уровня — самая быстрая, ближайшая к ядру процессора.',
+  'семантическая вёрстка':'Использование HTML-тегов по их смыслу (header, nav, article) для структуры и доступности.',
+  'семантику':'Смысловое значение элементов разметки, а не только их внешний вид.',
+  'медиазапросы':'Правила CSS, применяющие стили в зависимости от размера экрана (адаптивность).',
+  'медиазапросами':'Правила CSS для адаптации под размер экрана.',
+  'блочная модель':'Модель элемента в CSS: содержимое + внутренний отступ + граница + внешний отступ.',
+  'Flexbox':'Механизм CSS для гибкой одномерной раскладки элементов (в строку или столбец).',
+  'Grid':'Механизм CSS для двумерной раскладки элементов (строки и столбцы одновременно).',
+  'селекторы':'Правила CSS, указывающие, к каким элементам применять стиль (по тегу, классу, id).',
+  'виртуальный DOM':'Лёгкая копия DOM в памяти (React), позволяющая обновлять страницу эффективно.',
+  'абстрактные классы':'Классы, которые нельзя инстанцировать; задают общий шаблон для наследников.',
+  'интерфейсы':'Контракт, описывающий набор методов, которые класс обязан реализовать.',
+  'stateless':'Без сохранения состояния: каждый запрос обрабатывается независимо от предыдущих.',
+  'кортеж':'Строка таблицы в терминах реляционной модели.',
+  'кардинальность':'Количество строк (кортежей) в отношении.',
+  'AVL':'Сбалансированное двоичное дерево поиска со строгим контролем разницы высот поддеревьев.',
+  'красно-чёрное':'Сбалансированное дерево поиска с менее строгим балансом; используется в map/set.',
+  'B-дерево':'Сбалансированное дерево с многими потомками у узла; применяется в СУБД и файловых системах.',
+  'B-деревья':'Сбалансированные деревья с многими потомками; применяются в СУБД.',
+  'куча':'Структура данных для очереди с приоритетом; быстро возвращает минимум или максимум.',
+  'DFS':'Depth-First Search — обход дерева/графа в глубину.',
+  'BFS':'Breadth-First Search — обход дерева/графа в ширину, по уровням.',
+  'AES':'Advanced Encryption Standard — современный стандарт симметричного шифрования.',
+  'DES':'Data Encryption Standard — устаревший алгоритм симметричного шифрования.',
+  'ECC':'Elliptic Curve Cryptography — асимметричное шифрование на эллиптических кривых.',
+  'ARM':'Архитектура процессоров с сокращённым набором команд (RISC); используется в смартфонах.',
+  'x86':'Архитектура процессоров с полным набором команд (CISC); используется в ПК.',
+  'ASP.NET':'Фреймворк Microsoft для разработки веб-приложений на платформе .NET.',
+  'Ethernet':'Самая распространённая технология проводных локальных сетей (канальный уровень).',
+  'SEO':'Search Engine Optimization — оптимизация сайта для повышения позиций в поисковиках.',
+  'ER-диаграмма':'Диаграмма «сущность-связь» — модель данных на концептуальном уровне проектирования БД.',
+  'ER-диаграмму':'Диаграмма «сущность-связь» — модель данных предметной области.',
+  'ER-моделирования':'Моделирование данных через сущности и связи между ними.',
+  'Entity Framework':'ORM-инструмент Microsoft для работы с базой данных через классы C#.',
+  'ISO/IEC 12207':'Международный стандарт, описывающий процессы жизненного цикла программных систем.',
+  'ГОСТ':'Государственный стандарт — система нормативов, в т.ч. на оформление и процессы разработки.',
+  'BST':'Binary Search Tree — двоичное дерево поиска: слева значения меньше узла, справа больше.',
+  'OSI':'Open Systems Interconnection — эталонная семиуровневая модель сетевого взаимодействия.',
+  'TCP/IP':'Практический четырёхуровневый стек протоколов, на котором работает Интернет.',
+  'FIFO':'First In, First Out — «первым пришёл, первым вышел»; принцип работы очереди.',
+  'LIFO':'Last In, First Out — «последним пришёл, первым вышел»; принцип работы стека.',
+  'cookie':'Небольшие данные, сохраняемые браузером для поддержания сессии (HTTP без состояния).',
+  'commit':'Подтверждение транзакции — фиксация всех её изменений в базе данных.',
+  'Backlog':'Упорядоченный список задач: Product Backlog (всего проекта) или Sprint Backlog (спринта).',
+  'Product Backlog':'Полный упорядоченный список всех задач продукта в Scrum.',
+  'Sprint Backlog':'Список задач, выбранных на текущий спринт в Scrum.',
+  'Increment':'Готовый работающий результат, полученный за один спринт.',
+  'инкремент':'Готовый работающий результат, полученный за один спринт в Scrum.',
+  'Product Owner':'Владелец продукта — роль в Scrum: определяет, ЧТО нужно делать, ведёт бэклог.',
+  'Scrum Master':'Роль в Scrum: обеспечивает соблюдение процесса и устраняет помехи команде.',
+  'Increment':'Готовый работающий результат спринта в Scrum.',
+  'БД':'База данных — организованная совокупность взаимосвязанных данных.',
+  'СУБД':'Система управления базами данных — ПО для создания, хранения и управления БД.',
+  'РСУБД':'Реляционная СУБД — система управления базами данных на основе таблиц (язык SQL).',
+  'ЖЦ':'Жизненный цикл — период от возникновения потребности в системе до её вывода из эксплуатации.',
+  'ИС':'Информационная система — система для сбора, хранения и обработки информации.',
+  'ПО':'Программное обеспечение — совокупность программ.',
+  'ООП':'Объектно-ориентированное программирование — парадигма на основе объектов и классов.',
+  'НФ':'Нормальная форма — требование к структуре таблиц БД для устранения избыточности.',
+  'НФБК':'Нормальная форма Бойса-Кодда — усиленный вариант третьей нормальной формы.',
+  'ОЗУ':'Оперативное запоминающее устройство — основная память для текущих данных и программ.',
+  'ЦП':'Центральный процессор — основное вычислительное устройство ЭВМ (АЛУ + УУ).',
+  'МК':'Микроконтроллер — миниатюрный компьютер на одном чипе для управления устройствами.',
+  'TLS':'Transport Layer Security — протокол шифрования, основа защищённого соединения HTTPS.',
+  'YAGNI':'You Aren’t Gonna Need It — не реализуй то, что не нужно прямо сейчас.',
+  'PostgreSQL':'Мощная реляционная СУБД с открытым исходным кодом.',
+  'MySQL':'Популярная реляционная СУБД с открытым исходным кодом.',
+  'Oracle':'Коммерческая реляционная СУБД корпоративного уровня.',
+  'MongoDB':'Документоориентированная NoSQL-СУБД, хранит данные в виде JSON-документов.',
+  'Redis':'NoSQL-хранилище типа «ключ-значение», работает в оперативной памяти (очень быстрое).',
+  'Cassandra':'Колоночная NoSQL-СУБД для больших объёмов данных и аналитики.',
+  'Neo4j':'Графовая NoSQL-СУБД для хранения связей (соцсети, рекомендации).',
+  'React':'JavaScript-библиотека для построения интерфейсов из компонентов (виртуальный DOM).',
+  'Vue':'Прогрессивный JavaScript-фреймворк для построения интерфейсов.',
+  'Angular':'Полноценный фреймворк для веб-приложений на TypeScript (от Google).',
+  'Bootstrap':'CSS-фреймворк с готовыми компонентами и сеткой для быстрой вёрстки.',
+  'Tailwind':'CSS-фреймворк на основе мелких классов-утилит (utility-first).',
+  'TypeScript':'Надстройка над JavaScript со статической типизацией.',
+  'Spring':'Фреймворк для разработки приложений на Java.',
+  'Laravel':'PHP-фреймворк для веб-разработки.',
+  'WPF':'Windows Presentation Foundation — технология Microsoft для десктопных интерфейсов.',
+  'quicksort':'Быстрая сортировка: делит массив относительно опорного элемента; в среднем O(n log n).',
+  'merge sort':'Сортировка слиянием: делит пополам, сортирует части и сливает; всегда O(n log n).',
+  'heap sort':'Пирамидальная сортировка через структуру «куча»; O(n log n).',
+  'Undo':'Операция отмены последнего действия (типичное применение стека).',
+  'Waterfall':'Каскадная (водопадная) модель разработки: строго последовательные этапы.',
+  'FTPS':'FTP с шифрованием TLS — защищённая передача файлов.',
+  'SFTP':'Передача файлов поверх защищённого протокола SSH.',
+  'GET':'HTTP-метод получения ресурса (без тела запроса, идемпотентный).',
+  'POST':'HTTP-метод создания ресурса или отправки данных.',
+  'PUT':'HTTP-метод полной замены ресурса.',
+  'PATCH':'HTTP-метод частичного обновления ресурса.',
+  'DELETE':'HTTP-метод удаления ресурса.',
+  'HEAD':'HTTP-метод получения только заголовков ответа (без тела).',
+  'OPTIONS':'HTTP-метод запроса поддерживаемых сервером методов.',
+  'JSON':'JavaScript Object Notation — текстовый формат обмена данными в виде пар «ключ-значение».',
+  'JOIN':'Операция соединения таблиц в SQL по условию (на основе декартова произведения и выборки).',
+  'JS':'JavaScript — язык программирования для интерактивности веб-страниц.',
+  'P / NP':'Классы сложности задач: решаемые за полиномиальное время / проверяемые за полиномиальное время.',
+  'SRP':'Single Responsibility Principle — принцип единственной ответственности класса.',
+  'OCP':'Open/Closed Principle — открыт для расширения, закрыт для модификации.',
+  'LSP':'Liskov Substitution Principle — подкласс должен заменять базовый класс без поломки.',
+  'ISP':'Interface Segregation Principle — много узких интерфейсов лучше одного общего.',
+  'DIP':'Dependency Inversion Principle — зависимость от абстракций, а не от реализаций.',
+  'Liskov':'Барбара Лисков — автор принципа подстановки (буква L в SOLID).',
+  'ER':'Entity-Relationship — модель «сущность-связь» для проектирования БД.',
+  'ISO/IEC':'Международные организации по стандартизации; ISO/IEC 12207 — стандарт жизненного цикла ПО.',
+  'миграции':'Механизм пошагового изменения структуры базы данных с сохранением версий (Code First).',
+  'идемпотентный':'Свойство операции: повторное выполнение даёт тот же результат, что и однократное.',
+};
+
+/* строим regex один раз; ключи сортируем по длине (длинные раньше) */
+const glossKeys=Object.keys(GLOSSARY).sort((a,b)=>b.length-a.length);
+function escapeRe(s){return s.replace(/[.*+?^${}()|[\]\\]/g,'\\$&');}
+const glossRe=new RegExp('('+glossKeys.map(escapeRe).join('|')+')','g');
+
+/* подсветка терминов внутри элемента: обходим только текстовые узлы, не трогаем уже выделенные */
+function applyGlossary(root){
+  if(!root)return;
+  const skip=new Set(['CODE','PRE','BUTTON']);
+  const seen=new Set(); // каждый термин подсвечиваем 1 раз на урок
+  const walker=document.createTreeWalker(root,NodeFilter.SHOW_TEXT,{
+    acceptNode(node){
+      let p=node.parentElement;
+      while(p&&p!==root){
+        if(skip.has(p.tagName)||p.classList.contains('term')||p.classList.contains('gloss'))return NodeFilter.FILTER_REJECT;
+        p=p.parentElement;
+      }
+      return glossRe.test(node.nodeValue)?NodeFilter.FILTER_ACCEPT:NodeFilter.FILTER_REJECT;
+    }
+  });
+  const targets=[];
+  while(walker.nextNode())targets.push(walker.currentNode);
+  targets.forEach(node=>{
+    glossRe.lastIndex=0;
+    let html='',last=0,m,changed=false;
+    while((m=glossRe.exec(node.nodeValue))){
+      const key=m[1];
+      if(seen.has(key.toLowerCase())){continue;}
+      seen.add(key.toLowerCase());
+      const def=GLOSSARY[key]||GLOSSARY[Object.keys(GLOSSARY).find(k=>k.toLowerCase()===key.toLowerCase())];
+      html+=esc(node.nodeValue.slice(last,m.index))+`<span class="gloss" data-def="${def.replace(/"/g,'&quot;')}" data-term="${key.replace(/"/g,'&quot;')}">${key}</span>`;
+      last=m.index+key.length;changed=true;
+    }
+    if(changed){
+      html+=esc(node.nodeValue.slice(last));
+      const span=document.createElement('span');
+      span.innerHTML=html;
+      node.parentNode.replaceChild(span,node);
+    }
+  });
+}
+function esc(s){return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+
+/* всплывающее окно подсказки */
+let glossPop=null;
+function showGloss(el){
+  hideGloss();
+  glossPop=document.createElement('div');
+  glossPop.className='gloss-pop';
+  glossPop.innerHTML=`<b>${el.dataset.term}</b>${el.dataset.def}`;
+  document.body.appendChild(glossPop);
+  const r=el.getBoundingClientRect();
+  const pw=Math.min(300,window.innerWidth-24);
+  let left=r.left+r.width/2-pw/2;
+  left=Math.max(12,Math.min(left,window.innerWidth-pw-12));
+  glossPop.style.width=pw+'px';
+  glossPop.style.left=left+'px';
+  let top=r.bottom+8;
+  glossPop.style.top=top+'px';
+  requestAnimationFrame(()=>{
+    const ph=glossPop.offsetHeight;
+    if(top+ph>window.innerHeight-12){glossPop.style.top=(r.top-ph-8)+'px';}
+    glossPop.classList.add('show');
+  });
+}
+function hideGloss(){if(glossPop){glossPop.remove();glossPop=null;}document.querySelectorAll('.gloss.open').forEach(e=>e.classList.remove('open'));}
+/* hover на десктопе, тап на мобильном */
+document.addEventListener('mouseover',e=>{const g=e.target.closest('.gloss');if(g)showGloss(g);});
+document.addEventListener('mouseout',e=>{if(e.target.closest('.gloss'))hideGloss();});
+document.addEventListener('click',e=>{
+  const g=e.target.closest('.gloss');
+  if(g){e.stopPropagation();if(g.classList.contains('open')){hideGloss();}else{hideGloss();g.classList.add('open');showGloss(g);}}
+  else hideGloss();
+});
+window.addEventListener('scroll',hideGloss,true);
+
+function go(m){
+  mode=m;lessonId=null;
+  document.getElementById('tab-grid').classList.toggle('active',m==='grid');
+  document.getElementById('tab-flash').classList.toggle('active',m==='flash');
+  document.getElementById('tab-howto').classList.toggle('active',m==='howto');
+  render();
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+function openLesson(id){mode='lesson';lessonId=id;render();window.scrollTo({top:0});}
+function onSearch(v){curSearch=v.toLowerCase().trim();if(mode!=='grid')go('grid');else render();}
+
+function updateProgress(){
+  const n=learned.size;
+  document.getElementById('learned-n').textContent=n;
+  const c=2*Math.PI*16, off=c*(1-n/22);
+  const fg=document.getElementById('ring-fg');
+  fg.style.strokeDasharray=c;fg.style.strokeDashoffset=off;
+}
+
+function toggleLearned(id,e){
+  if(e)e.stopPropagation();
+  learned.has(id)?learned.delete(id):learned.add(id);
+  updateProgress();render();
+}
+
+function copyFormal(id,e){
+  if(e)e.stopPropagation();
+  const el=document.getElementById('formal-'+id);
+  if(!el)return;
+  const text=el.innerText.replace(/\n{3,}/g,'\n\n').trim();
+  const btn=e.currentTarget;
+  navigator.clipboard.writeText(text).then(()=>{
+    btn.classList.add('copied');
+    const orig=btn.innerHTML;
+    btn.innerHTML='<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6"><path d="M20 6 9 17l-5-5"/></svg>скопировано';
+    setTimeout(()=>{btn.classList.remove('copied');btn.innerHTML=orig;},1800);
+  }).catch(()=>{
+    btn.textContent='выдели вручную';
+  });
+}
+
+function filtered(){
+  return TOPICS.filter(t=>{
+    if(curCat!=='all'&&t.cat!==curCat)return false;
+    if(curSearch){
+      const hay=(t.title+' '+t.q+' '+t.simple+' '+t.explain).toLowerCase();
+      if(!hay.includes(curSearch))return false;
+    }
+    return true;
+  });
+}
+
+/* ---------- RENDER ---------- */
+function render(){
+  if(mode==='lesson')return renderLesson();
+  if(mode==='flash')return renderFlash();
+  if(mode==='howto')return renderHowto();
+  renderGrid();
+}
+
+function renderGrid(){
+  const counts={all:TOPICS.length};
+  TOPICS.forEach(t=>counts[t.cat]=(counts[t.cat]||0)+1);
+  let chips=`<button class="chip ${curCat==='all'?'active':''}" style="${curCat==='all'?'background:var(--accent)':''}" onclick="setCat('all')">Все · ${counts.all}</button>`;
+  for(const k in CATS){
+    if(!counts[k])continue;
+    const active=curCat===k;
+    chips+=`<button class="chip ${active?'active':''}" style="${active?`background:${CATS[k].color};color:#10110f`:`color:${CATS[k].color}`}" onclick="setCat('${k}')"><span class="dot"></span>${CATS[k].label} · ${counts[k]}</button>`;
+  }
+  const list=filtered();
+  let cards='';
+  list.forEach((t,i)=>{
+    const c=CATS[t.cat];
+    cards+=`<article class="card ${learned.has(t.id)?'learned':''}" style="--cat:${c.color};animation-delay:${i*0.04}s" onclick="openLesson(${t.id})">
+      <span class="num">${String(t.id).padStart(2,'0')}</span>
+      <span class="cat-tag"><span class="dot"></span>${c.label}</span>
+      <h3>${t.title}</h3>
+      <p class="teaser">${stripTags(t.simple)}</p>
+      <span class="learned-badge"><svg width="22" height="22" viewBox="0 0 24 24"><circle cx="12" cy="12" r="11" fill="var(--cat)"/><path d="m7 12 3 3 7-7" fill="none" stroke="#11110d" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+    </article>`;
+  });
+  view.innerHTML=`
+    <section class="hero">
+      <div class="kick">3 дня до защиты · поехали</div>
+      <h2>Разберём все 22 вопроса <em>по-настоящему</em> — с примерами и самопроверкой.</h2>
+      <p>Каждая тема: идея на пальцах, объяснение сути, конкретный пример и выжимка «что запомнить». Нажми на карточку, чтобы открыть урок, и отмечай пройденное.</p>
+    </section>
+    <div class="chips">${chips}</div>
+    ${list.length?`<div class="grid">${cards}</div>`:`<div class="empty">Ничего не нашлось по запросу «${curSearch}». Попробуй другое слово.</div>`}
+  `;
+  updateProgress();
+}
+function setCat(c){curCat=c;render();}
+function stripTags(h){return h.replace(/<[^>]+>/g,'');}
+
+function renderLesson(){
+  const t=TOPICS.find(x=>x.id===lessonId);
+  const c=CATS[t.cat];
+  const idx=TOPICS.findIndex(x=>x.id===lessonId);
+  const prev=idx>0?TOPICS[idx-1]:null;
+  const next=idx<TOPICS.length-1?TOPICS[idx+1]:null;
+  const done=learned.has(t.id);
+  const sec=(cls,icon,label,body)=>`<div class="section ${cls}"><div class="s-head"><div class="s-icon">${ICONS[icon]}</div><div class="s-label">${label}</div></div><div class="s-body">${body}</div></div>`;
+  view.innerHTML=`<article class="lesson" style="--cat:${c.color}">
+    <button class="back" onclick="go('grid')">← все темы</button>
+    <div class="l-head">
+      <div class="l-num">${String(t.id).padStart(2,'0')}</div>
+      <div class="l-head-txt">
+        <span class="l-cat"><span class="dot"></span>${c.label}</span>
+        <h1 class="l-title">${t.title}</h1>
+      </div>
+    </div>
+    <div class="q-block"><span class="q-label">Билет</span><span class="q-text">${t.q}</span></div>
+    ${sec('simple','simple','На пальцах',t.simple)}
+    ${sec('','explain','Объяснение сути',t.explain)}
+    ${t.formal?`<div class="section formal"><div class="s-head"><div class="s-icon">${ICONS.formal}</div><div class="s-label">Формальный ответ для письменной работы</div><button class="copy-btn" onclick="copyFormal(${t.id},event)"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>копировать</button></div><div class="s-body" id="formal-${t.id}">${t.formal}</div></div>`:''}
+    ${sec('','example','Пример',t.example)}
+    ${sec('remember','remember','Что запомнить',t.remember)}
+    <button class="mark-btn ${done?'done':''}" onclick="toggleLearned(${t.id})">
+      ${done?'<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="m5 12 5 5 9-9"/></svg> Изучено':'Отметить как изученное'}
+    </button>
+    <nav class="l-nav">
+      <button ${prev?`onclick="openLesson(${prev.id})"`:'disabled'}>
+        <span class="dir">← предыдущая</span>
+        <span class="nt">${prev?prev.title:'—'}</span>
+      </button>
+      <button class="next" ${next?`onclick="openLesson(${next.id})"`:'disabled'}>
+        <span class="dir">следующая →</span>
+        <span class="nt">${next?next.title:'—'}</span>
+      </button>
+    </nav>
+  </article>`;
+  // подсветка терминов только в смысловых блоках (не в формальном ответе и не в коде)
+  applyGlossary(view.querySelector('.section.simple .s-body'));
+  view.querySelectorAll('.section:not(.simple):not(.formal):not(.remember) .s-body').forEach(applyGlossary);
+}
+
+/* ---------- HOWTO ---------- */
+function renderHowto(){
+  view.innerHTML=`<div class="howto">
+    <div class="kick">письменный экзамен · тактика</div>
+    <h2>Как написать ответ <em>на максимальный балл</em></h2>
+    <p class="lede">Знать тему и хорошо её изложить на бумаге — разные навыки. Преподаватель читает десятки работ и оценивает не только правильность, но и <strong style="color:var(--text)">структуру, полноту и точность терминов</strong>. Ниже — рабочая схема, по которой строится любой письменный ответ.</p>
+
+    <h3><span class="hn">1</span>Скелет ответа<span class="sub">по нему пишется любой вопрос</span></h3>
+    <p style="color:var(--muted);font-size:15px;margin-top:6px">Не пиши «потоком сознания». Раздели ответ на части — даже на черновике набросай этот каркас, а потом наполняй. Проверяющий сразу видит логику и ставит выше.</p>
+    <div class="skeleton">
+      <div class="sk-step"><span class="tag">первая фраза</span><h4>Определение</h4><p>Начни с чёткого определения главного термина из вопроса. Это «якорь» всего ответа. «<em>Транзакция — это неделимая последовательность операций над БД…</em>»</p></div>
+      <div class="sk-step"><span class="tag">раскрытие</span><h4>Классификация / состав / принципы</h4><p>Разбей понятие на части: виды, свойства, этапы, компоненты. Здесь живут списки и перечисления — их легко проверять и за них дают баллы.</p></div>
+      <div class="sk-step"><span class="tag">показать понимание</span><h4>Пояснение сути</h4><p>В 1–2 предложениях объясни <em>зачем</em> это нужно и как работает. Это отличает понимание от зубрёжки.</p></div>
+      <div class="sk-step"><span class="tag">закрепить балл</span><h4>Пример</h4><p>Короткий конкретный пример или схема. Именно пример убеждает, что ты владеешь темой, а не пересказал учебник.</p></div>
+      <div class="sk-step"><span class="tag">по желанию</span><h4>Вывод / связь с соседними темами</h4><p>Одна фраза-итог или упоминание смежного понятия («…на этом же принципе строится HTTPS»). Показывает широту.</p></div>
+    </div>
+
+    <h3><span class="hn">2</span>Что повышает и что снижает оценку</h3>
+    <div class="dd-grid">
+      <div class="dd good">
+        <div class="dd-h"><span class="dd-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--db)" stroke-width="3"><path d="m5 12 5 5 9-9"/></svg></span>Делай так</div>
+        <ul>
+          <li>Начинай с определения, выделяй термины — подчёркивай ключевые слова, если экзамен на бумаге.</li>
+          <li>Используй точную терминологию: не «штука для адресов», а «MAC-адрес канального уровня».</li>
+          <li>Структурируй: пункты, нумерация, абзацы под каждый подвопрос.</li>
+          <li>Если вопрос составной (например «MVC, MVVM, MVP») — ответь по <em>каждой</em> части и в конце сравни.</li>
+          <li>Рисуй схемы там, где они уместны (OSI, дерево, V-модель) — за них охотно добавляют баллы.</li>
+          <li>Не уверен в детали — напиши то, в чём уверен. Частично верный структурный ответ ценится.</li>
+        </ul>
+      </div>
+      <div class="dd bad">
+        <div class="dd-h"><span class="dd-icon"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="var(--sec)" stroke-width="3"><path d="M18 6 6 18M6 6l12 12"/></svg></span>Избегай</div>
+        <ul>
+          <li>Сплошной текст без абзацев — проверяющий теряет нить и снижает балл.</li>
+          <li>«Вода» и общие слова вместо терминов и фактов.</li>
+          <li>Отвечать только на часть составного вопроса (типичная потеря баллов).</li>
+          <li>Выдумывать, если не знаешь, — фактическая ошибка хуже честного пропуска.</li>
+          <li>Зацикливаться на одном вопросе, забыв про время на остальные.</li>
+          <li>Писать пример «вообще» — он должен иллюстрировать именно этот термин.</li>
+        </ul>
+      </div>
+    </div>
+
+    <h3><span class="hn">3</span>Разбор: один и тот же вопрос — слабо и сильно</h3>
+    <p style="color:var(--muted);font-size:15px;margin-top:6px">Вопрос 21 — «Транзакции. Уровни изоляции». Сравни два ответа.</p>
+    <div class="worked">
+      <div class="w-bar"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--sec)" stroke-width="2.4"><circle cx="12" cy="12" r="10"/><path d="M12 8v4M12 16h.01"/></svg> <b>Слабый ответ</b> — на 3</div>
+      <div class="w-body">
+        <div class="w-part">
+          <div class="w-text">«Транзакция это когда несколько действий в базе данных. Они должны выполняться вместе. Есть разные уровни чтобы они не мешали. Например перевод денег.»</div>
+          <div class="w-note">Нет точного определения, не назван ни ACID, ни уровни изоляции, пример брошен без раскрытия. Всё верно «по смыслу», но пусто по содержанию.</div>
+        </div>
+      </div>
+    </div>
+    <div class="worked">
+      <div class="w-bar"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--db)" stroke-width="2.4"><path d="M20 6 9 17l-5-5"/></svg> <b>Сильный ответ</b> — на 5</div>
+      <div class="w-body">
+        <div class="w-part">
+          <div class="w-role">Определение</div>
+          <div class="w-text"><strong>Транзакция</strong> — неделимая последовательность операций над БД, выполняемая по принципу «всё или ничего».</div>
+        </div>
+        <div class="w-part">
+          <div class="w-role">Раскрытие — свойства ACID</div>
+          <div class="w-text">Гарантируется свойствами <strong>ACID</strong>: атомарность (всё или ничего), согласованность (БД остаётся корректной), изолированность (параллельные транзакции не мешают), долговечность (после commit данные сохраняются при сбое).</div>
+        </div>
+        <div class="w-part">
+          <div class="w-role">Раскрытие — уровни изоляции</div>
+          <div class="w-text">Изоляция настраивается уровнями (от слабого к сильному): <strong>Read Uncommitted → Read Committed → Repeatable Read → Serializable</strong>. Каждый следующий устраняет аномалию: грязное, неповторяющееся, фантомное чтение соответственно.</div>
+        </div>
+        <div class="w-part">
+          <div class="w-role">Пример</div>
+          <div class="w-text">Перевод 1000 ₽: «списать у A» + «зачислить B». При сбое после списания атомарность откатит обе операции — деньги не пропадут. Реализуется через блокировки: Shared (S) на чтение, Exclusive (X) на запись.</div>
+        </div>
+        <div class="w-note" style="margin-top:14px">Те же факты, что в слабом ответе, но структура «определение → ACID → уровни → пример» сразу показывает владение темой.</div>
+      </div>
+    </div>
+
+    <h3><span class="hn">4</span>Готовые связки-фразы</h3>
+    <p style="color:var(--muted);font-size:15px;margin-top:6px">Шаблоны, которые задают академический тон и экономят время на формулировках.</p>
+    <div class="phrases">
+      <div class="phrase"><div class="ph-when">Старт ответа</div><div class="ph-txt">«Под термином … понимают …»</div></div>
+      <div class="phrase"><div class="ph-when">Классификация</div><div class="ph-txt">«Принято выделять следующие виды: …»</div></div>
+      <div class="phrase"><div class="ph-when">Переход к сути</div><div class="ph-txt">«Ключевая идея состоит в том, что …»</div></div>
+      <div class="phrase"><div class="ph-when">Пример</div><div class="ph-txt">«Рассмотрим на примере …»</div></div>
+      <div class="phrase"><div class="ph-when">Сравнение</div><div class="ph-txt">«Главное отличие … от … заключается в …»</div></div>
+      <div class="phrase"><div class="ph-when">Вывод</div><div class="ph-txt">«Таким образом, … применяется для …»</div></div>
+    </div>
+
+    <h3><span class="hn">5</span>Тайминг на самом экзамене</h3>
+    <p style="color:var(--muted);font-size:15px;margin-top:6px">Условный план для билета на 2 вопроса. Подгони под реальное время.</p>
+    <div class="clock">
+      <div class="cl-row"><span class="cl-t">0–5 мин</span><span class="cl-d">Прочитай оба вопроса. На черновике набросай <strong style="color:var(--text)">скелет</strong> (пункты-маркеры) к каждому — пока память свежая.</span></div>
+      <div class="cl-row"><span class="cl-t">осн. время</span><span class="cl-d">Пиши ответ по скелету. Начинай с того вопроса, который знаешь <strong style="color:var(--text)">лучше</strong> — он задаст уверенность и точно принесёт баллы.</span></div>
+      <div class="cl-row"><span class="cl-t">−10 мин</span><span class="cl-d">Переходи ко второму вопросу, даже если первый не идеален. <strong style="color:var(--text)">Два средних ответа лучше одного идеального.</strong></span></div>
+      <div class="cl-row"><span class="cl-t">−5 мин</span><span class="cl-d">Перечитай: проверь термины, добавь пропущенный пример или схему, подчеркни ключевые слова.</span></div>
+    </div>
+
+    <p style="color:var(--muted);font-size:14px;margin:32px 0 0;padding-top:20px;border-top:1px solid var(--line-soft)">Главный принцип: <strong style="color:var(--text)">определение → структура → суть → пример</strong>. Эта формула работает для всех 22 вопросов — открой любую тему, и увидишь, что её разделы уже разложены ровно в этом порядке.</p>
+  </div>`;
+}
+
+
+let flashDeck=[],flashIdx=0,flashFlipped=false,flashCat='all';
+function buildDeck(){
+  flashDeck=TOPICS.filter(t=>flashCat==='all'||t.cat===flashCat);
+  for(let i=flashDeck.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[flashDeck[i],flashDeck[j]]=[flashDeck[j],flashDeck[i]];}
+  flashIdx=0;flashFlipped=false;
+}
+function renderFlash(){
+  if(!flashDeck.length)buildDeck();
+  const counts={all:TOPICS.length};
+  TOPICS.forEach(t=>counts[t.cat]=(counts[t.cat]||0)+1);
+  let pick=`<button class="chip ${flashCat==='all'?'active':''}" style="${flashCat==='all'?'background:var(--accent)':''}" onclick="setFlashCat('all')">Все · ${counts.all}</button>`;
+  for(const k in CATS){if(!counts[k])continue;const a=flashCat===k;pick+=`<button class="chip ${a?'active':''}" style="${a?`background:${CATS[k].color};color:#10110f`:`color:${CATS[k].color}`}" onclick="setFlashCat('${k}')"><span class="dot"></span>${CATS[k].label}</button>`;}
+  const t=flashDeck[flashIdx];const c=CATS[t.cat];
+  view.innerHTML=`<div class="flash-wrap">
+    <div class="flash-top">
+      <span class="flash-count">Карточка ${flashIdx+1} / ${flashDeck.length}</span>
+      <button class="back" style="margin:0" onclick="reshuffle()">⟳ перемешать</button>
+    </div>
+    <div class="flash-cat-pick">${pick}</div>
+    <div class="flashcard ${flashFlipped?'flipped':''}" style="--cat:${c.color}" onclick="flipCard()">
+      <div class="fc-inner">
+        <div class="fc-face fc-front">
+          <div class="fc-num">${String(t.id).padStart(2,'0')}</div>
+          <div class="fc-tag">${c.label}</div>
+          <div class="fc-q">${t.title}</div>
+          <div class="fc-hint">нажми, чтобы увидеть суть →</div>
+        </div>
+        <div class="fc-face fc-back">
+          <div class="fc-tag">Что запомнить</div>
+          <div class="fc-a">${t.remember}</div>
+        </div>
+      </div>
+    </div>
+    <div class="flash-ctrl">
+      <button onclick="prevCard(event)">← назад</button>
+      <button class="primary" onclick="nextCard(event)">${flashIdx===flashDeck.length-1?'сначала':'дальше →'}</button>
+    </div>
+  </div>`;
+}
+function setFlashCat(c){flashCat=c;buildDeck();renderFlash();}
+function flipCard(){flashFlipped=!flashFlipped;renderFlash();}
+function nextCard(e){if(e)e.stopPropagation();flashIdx=(flashIdx+1)%flashDeck.length;flashFlipped=false;renderFlash();}
+function prevCard(e){if(e)e.stopPropagation();flashIdx=(flashIdx-1+flashDeck.length)%flashDeck.length;flashFlipped=false;renderFlash();}
+function reshuffle(){buildDeck();renderFlash();}
+
+/* keyboard nav for flashcards */
+document.addEventListener('keydown',e=>{
+  if(mode!=='flash')return;
+  if(e.key==='ArrowRight')nextCard();
+  else if(e.key==='ArrowLeft')prevCard();
+  else if(e.key===' '){e.preventDefault();flipCard();}
+});
+
+render();
+</script>
+</body>
+</html>
